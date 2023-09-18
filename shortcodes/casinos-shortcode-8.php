@@ -280,6 +280,11 @@ function aces_casinos_shortcode_8($atts) {
 										<img role="img" class="emoji" alt="🔥" src="https://s.w.org/images/core/emoji/13.1.0/svg/1f525.svg">
 										<?php echo esc_html($bonus_fields['best_for']); ?>
 									</div>
+									<? if (shortcode_exists('compare_button')) { ?>
+										<div class="compare">
+											<?= do_shortcode('[compare_button id="'. get_the_id() .'"]') ?>
+										</div>
+									<? } ?>
 									<?php } ?>
 								</div>
 							</div>
