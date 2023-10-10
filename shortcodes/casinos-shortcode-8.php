@@ -209,6 +209,8 @@ function aces_casinos_shortcode_8($atts) {
 
 					$bonus_fields = get_field('bonus_fields');
 
+					$sett_bonus_tf = get_field('sett_bonus_tf','option');
+
 					if ($casino_button_title) {
 						$button_title = $casino_button_title;
 					} else {
@@ -275,22 +277,23 @@ function aces_casinos_shortcode_8($atts) {
 									<?php if($bonus_fields && $bonus_fields['trusted']) { ?>
 										<div class="trust"><?php esc_html_e('Trusted', 'aces'); ?></div>
 									<? } 
-									if($bonus_fields && $bonus_fields['best_for']) { ?>
-									<div class="best">
-										<img role="img" class="emoji" alt="🔥" src="https://s.w.org/images/core/emoji/13.1.0/svg/1f525.svg">
-										<?php echo esc_html($bonus_fields['best_for']); ?>
-									</div>
-									<? if (shortcode_exists('compare_button')) { ?>
+									if($bonus_fields && $bonus_fields['best_for'] && $sett_bonus_tf) { ?>
+										<div class="best">
+											<img role="img" class="emoji" alt="🔥" src="https://s.w.org/images/core/emoji/13.1.0/svg/1f525.svg">
+											<?php echo esc_html($bonus_fields['best_for']); ?>
+										</div>
+									<?php } 
+									
+									if (shortcode_exists('compare_button')) { ?>
 										<div class="compare">
 											<?= do_shortcode('[compare_button id="'. get_the_id() .'"]') ?>
 										</div>
 									<? } ?>
-									<?php } ?>
 								</div>
 							</div>
 							<div class="space-organizations-7-archive-item-central box-45 relative">
 								<div class="space-organizations-7-archive-item-ins-pd relative">
-									<?php if($bonus_fields && $bonus_fields['bonus_title']) { ?>
+									<?php if($bonus_fields && $bonus_fields['bonus_title'] && $sett_bonus_tf) { ?>
 										<div class="space-organizations-7-archive-item-bonus">
 											<strong><?php echo ($bonus_fields['bonus_title']); ?></strong>
 										</div>
@@ -351,7 +354,7 @@ function aces_casinos_shortcode_8($atts) {
 												</div>
 											<?php }
 
-											if ($bonus_fields) { ?>
+											if ($bonus_fields && $sett_bonus_tf) { ?>
 												<a class="bonus-more" href="javascript:void(0);">
 													<i class="fas fa-chevron-down"></i>
 												</a>
@@ -364,7 +367,7 @@ function aces_casinos_shortcode_8($atts) {
 						</div>
 
 						<?php
-							if ($bonus_fields) {
+							if ($bonus_fields && $sett_bonus_tf) {
 						?>
 
 						<div class="bonus-content hide">
