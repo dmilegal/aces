@@ -2,6 +2,13 @@
 function aces_casinos_shortcode_8($atts)
 {
 
+	if (apply_filters('geoip_object', '')) {
+		$record = apply_filters('geoip_object', '');
+		$iso_code = $record->country->isoCode;
+		$country = $record->country->name;
+		$flag = $record->extra->flag;
+	}
+
 	ob_start();
 
 	// Define attributes and their defaults
@@ -141,20 +148,20 @@ function aces_casinos_shortcode_8($atts)
 
 ?>
 
-		<div class="space-shortcode-wrap space-shortcode-11 relative">
-			<div class="space-shortcode-wrap-ins relative">
+		<div class="lb-casino-selection">
+			<div class="lb-casino-selection__inner">
 				<?php
 
 				if (class_exists('Casino_Noref_Popup'))
 					echo do_shortcode('[ref_casinos_popup]');
 
 				if ($title) { ?>
-					<div class="space-block-title relative">
+					<div class="lb-casino-selection__title">
 						<span><?php echo esc_html($title); ?></span>
 					</div>
 				<?php } ?>
 
-				<div>
+				<div class="lb-casino-selection__list">
 					<?php while ($casino_query->have_posts()) : $casino_query->the_post();
 						global $post;
 						get_template_part('theme-parts/molecules/casino-card', null, ['casino_id' => get_the_ID(),]);
