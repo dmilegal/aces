@@ -164,7 +164,7 @@ function aces_casinos_shortcode_8($atts)
 				<div class="lb-casino-selection__list">
 					<?php while ($casino_query->have_posts()) : $casino_query->the_post();
 						global $post;
-						get_template_part('theme-parts/molecules/casino-card', null, ['casino_id' => get_the_ID(),]);
+						get_template_part('theme-parts/cells/casino-card', null, ['casino_id' => get_the_ID(),]);
 					endwhile ?>
 				</div>
 
