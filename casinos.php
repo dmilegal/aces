@@ -524,15 +524,15 @@ function aces_casinos()
 	register_taxonomy('casino-est', 'casino', $args);
 
 	// regisster meta fields
-	register_post_meta( 'casino', 'selected_bonus_for_card', array(
+	register_post_meta('casino', 'main_bonus_for_casino', array(
 		'show_in_rest' => true,
 		'type' => 'string',
 		'single' => true,
 		'sanitize_callback' => 'sanitize_text_field',
-		'auth_callback' => function() { 
-				return current_user_can( 'edit_posts' );
+		'auth_callback' => function () {
+			return current_user_can('edit_posts');
 		}
-));
+	));
 }
 
 /* --- Add custom slug for taxonomy 'casino-category' --- */
@@ -1267,8 +1267,8 @@ function aces_casinos_ratings_save_fields($post_id)
 		update_post_meta($post_id, 'casino_rating_customer', sanitize_text_field(wp_unslash($_POST['casino_rating_customer'])));
 	}
 
-	if (isset($_POST['selected_bonus_for_card'])) {
-		update_post_meta($post_id, 'selected_bonus_for_card', sanitize_text_field(wp_unslash($_POST['selected_bonus_for_card'])));
+	if (isset($_POST['main_bonus_for_casino'])) {
+		update_post_meta($post_id, 'main_bonus_for_casino', sanitize_text_field(wp_unslash($_POST['main_bonus_for_casino'])));
 	}
 
 	if (!wp_is_post_revision($post_id)) {
@@ -1629,18 +1629,20 @@ function aces_casinos_display_bonuses_list_meta_box($post)
 			</ul>
 		</div>
 		<div>
-			<? $value = get_post_meta($post->ID, 'selected_bonus_for_card', true);?>
+			<? $value = get_post_meta($post->ID, 'main_bonus_for_casino', true); ?>
 			<p>
-				<label for="selected_bonus_for_card_field" class="strong"><?= __("Bonus for side card", 'aces') ?></label>
+				<label for="main_bonus_for_casino_field" class="strong">
+					<strong><?= __("Main Bonus", 'aces') ?></strong>
+				</label>
 			</p>
-			<select name="selected_bonus_for_card" id="selected_bonus_for_card_field" style="width: calc(100% - 32px);">
+			<select name="main_bonus_for_casino" id="main_bonus_for_casino_field" style="width: calc(100% - 32px);">
 				<option value="" <?php selected($value,  ""); ?>><?= __('Not show', 'aces') ?></option>
 				<option value="random" <?php selected($value,  "random"); ?>><?= __('Random', 'aces') ?></option>
 				<?php foreach ($bonuses as $bonus) { ?>
 					<option value="<?= $bonus->ID ?>" <?php selected($value,  $bonus->ID); ?>><?php esc_html_e($bonus->post_title); ?></option>
 				<?php } ?>
-
 			</select>
+			<span><?= __("Main bonus will be shown in the card and in the sidebar on the single page", 'aces') ?></span>
 		</div>
 	<?php
 	} else {
