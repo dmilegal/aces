@@ -17,13 +17,14 @@ $aces_version = '3.0.1';
 
 global $aces_options, $aces_plugin_dir, $aces_plugin_url;
 
-$aces_plugin_dir = untrailingslashit( plugin_dir_path( __FILE__ ) );
-$aces_plugin_url = untrailingslashit( plugin_dir_url( __FILE__ ) );
+$aces_plugin_dir = untrailingslashit(plugin_dir_path(__FILE__));
+$aces_plugin_url = untrailingslashit(plugin_dir_url(__FILE__));
 
-function aces_init() {
-	load_plugin_textdomain( 'aces', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
+function aces_init()
+{
+    load_plugin_textdomain('aces', false, plugin_basename(dirname(__FILE__)) . '/languages/');
 }
-add_filter( 'init', 'aces_init' );
+add_filter('init', 'aces_init');
 
 /*  ---  Settings  ---  */
 
@@ -67,40 +68,86 @@ include_once $aces_plugin_dir . '/functions/geolocation.php';
 
 /*  ACES Rating Stars Start */
 
-function aces_star_rating( $args = array() ) {
+function aces_star_rating($args = array())
+{
     $defaults    = array(
         'rating' => 0,
         'type'   => 'rating',
         'stars_number' => 0,
         'echo'   => true,
     );
-    $parsed_args = wp_parse_args( $args, $defaults );
+    $parsed_args = wp_parse_args($args, $defaults);
 
-    $rating = (float) str_replace( ',', '.', $parsed_args['rating'] );
+    $rating = (float) str_replace(',', '.', $parsed_args['rating']);
     $stars_number = $parsed_args['stars_number'];
- 
+
     // if ( 'percent' === $parsed_args['type'] ) {
     //    $rating = round( $rating / $stars_number, 0 ) / 2;
     // }
 
-    $full_stars  = floor( $rating );
-    $half_stars  = ceil( $rating - $full_stars );
+    $full_stars  = floor($rating);
+    $half_stars  = ceil($rating - $full_stars);
     $empty_stars = $stars_number - $full_stars - $half_stars;
- 
+
     $output  = '<div class="star-rating">';
-    $output .= str_repeat( '<div class="star star-full" aria-hidden="true"></div>', $full_stars );
-    $output .= str_repeat( '<div class="star star-half" aria-hidden="true"></div>', $half_stars );
-    $output .= str_repeat( '<div class="star star-empty" aria-hidden="true"></div>', $empty_stars );
+    $output .= str_repeat('<div class="star star-full" aria-hidden="true"></div>', $full_stars);
+    $output .= str_repeat('<div class="star star-half" aria-hidden="true"></div>', $half_stars);
+    $output .= str_repeat('<div class="star star-empty" aria-hidden="true"></div>', $empty_stars);
     $output .= '</div>';
- 
-    if ( $parsed_args['echo'] ) {
+
+    if ($parsed_args['echo']) {
         echo $output;
     }
- 
+
     return $output;
 }
 
 /*  ACES Rating Stars End */
+
+/* ACES Get Main Casino Bonus Start */
+
+function aces_get_main_casino_bonus_id($casino_id)
+{
+    $selected_bonus = get_post_meta($casino_id, 'main_bonus_for_casino', true);
+
+    if (!$selected_bonus) return false;
+
+    $args = array(
+        'fields' => 'ids',
+        'posts_per_page' => 1,
+        'post_type' => 'bonus',
+        'meta_query' => array(
+            array(
+                'key' => 'bonus_parent_casino',
+                'value' => $casino_id,
+                'compare' => 'LIKE'
+            )
+        )
+    );
+
+    if ($selected_bonus === 'random') {
+
+        $bonuses = get_posts(array(
+            ...$args,
+            'orderby' => 'rand',
+        ));
+
+        return count($bonuses) ? $bonuses[0] : false;
+    };
+
+    $bonuses = get_posts(array(
+        ...$args,
+        'post__in' => [$selected_bonus],
+    ));
+
+    if (count($bonuses)) return $bonuses[0];
+
+    delete_post_meta($casino_id, 'main_bonus_for_casino');
+
+    return false;
+}
+
+/* ACES Get Main Casino Bonus End */
 
 /*  Custom Aces Plugin Widgets Start  */
 
@@ -170,25 +217,27 @@ include_once $aces_plugin_dir . '/shortcodes/cons-shortcode-1.php';
 
 /*  Image Uploader Start  */
 
-function aces_image_uploader() {
+function aces_image_uploader()
+{
     global $typenow;
-    if( $typenow == 'casino' || $typenow == 'game' || $typenow == 'bonus' ) {
+    if ($typenow == 'casino' || $typenow == 'game' || $typenow == 'bonus') {
 
-        if ( ! did_action( 'wp_enqueue_media' ) ) {
-			wp_enqueue_media();
-		}
+        if (!did_action('wp_enqueue_media')) {
+            wp_enqueue_media();
+        }
 
-        wp_register_script( 'aces-image-uploader', plugin_dir_url( __FILE__ ) . 'js/image-uploader.js', array( 'jquery' ), '2.4' );
-        wp_enqueue_script( 'aces-image-uploader' );
+        wp_register_script('aces-image-uploader', plugin_dir_url(__FILE__) . 'js/image-uploader.js', array('jquery'), '2.4');
+        wp_enqueue_script('aces-image-uploader');
     }
 }
-add_action( 'admin_enqueue_scripts', 'aces_image_uploader' );
+add_action('admin_enqueue_scripts', 'aces_image_uploader');
 
 /*  Image Uploader End  */
 
 /*  Connecting style files for the plugin - Start  */
 
-function aces_stylesheets() {
+function aces_stylesheets()
+{
     wp_enqueue_style('aces-style', $GLOBALS['aces_plugin_url'] . '/css/aces-style.css', array(), $GLOBALS['aces_version'], 'all');
     wp_enqueue_style('aces-media', $GLOBALS['aces_plugin_url'] . '/css/aces-media.css', array(), $GLOBALS['aces_version'], 'all');
 }
@@ -200,61 +249,65 @@ add_action('wp_enqueue_scripts', 'aces_stylesheets');
 
 /*  ---  Casinos  ---  */
 
-function aces_logo_image_column_casino( $column_ars ) {
+function aces_logo_image_column_casino($column_ars)
+{
 
-	$column_ars = array_slice( $column_ars, 0, 1, true )
-	+ array('featured_logo' => 'Logo')
-	+ array_slice( $column_ars, 1, NULL, true );
-	return $column_ars;
+    $column_ars = array_slice($column_ars, 0, 1, true)
+        + array('featured_logo' => 'Logo')
+        + array_slice($column_ars, 1, NULL, true);
+    return $column_ars;
 }
 
 add_filter('manage_casino_posts_columns', 'aces_logo_image_column_casino');
 
 /*  ---  Games  ---  */
 
-function aces_logo_image_column_game( $column_ars ) {
+function aces_logo_image_column_game($column_ars)
+{
 
-	$column_ars = array_slice( $column_ars, 0, 1, true )
-	+ array('featured_logo' => 'Image')
-	+ array_slice( $column_ars, 1, NULL, true );
-	return $column_ars;
+    $column_ars = array_slice($column_ars, 0, 1, true)
+        + array('featured_logo' => 'Image')
+        + array_slice($column_ars, 1, NULL, true);
+    return $column_ars;
 }
 
 add_filter('manage_game_posts_columns', 'aces_logo_image_column_game');
 
 /*  ---  Bonuses  ---  */
 
-function aces_logo_image_column_bonus( $column_ars ) {
+function aces_logo_image_column_bonus($column_ars)
+{
 
-	$column_ars = array_slice( $column_ars, 0, 1, true )
-	+ array('featured_logo' => 'Image')
-	+ array_slice( $column_ars, 1, NULL, true );
-	return $column_ars;
+    $column_ars = array_slice($column_ars, 0, 1, true)
+        + array('featured_logo' => 'Image')
+        + array_slice($column_ars, 1, NULL, true);
+    return $column_ars;
 }
 
 add_filter('manage_bonus_posts_columns', 'aces_logo_image_column_bonus');
 
 /*  ---  Display logo/image column  ---  */
 
-function aces_display_logo_column( $column_name, $post_id ) {
- 
-	if( $column_name == 'featured_logo' ) {
-		if( has_post_thumbnail( $post_id ) ) {
-			$logo_src = wp_get_attachment_image_src(get_post_thumbnail_id($post_id), 'thumbnail');
-			$logo_id = get_post_thumbnail_id( $post_id );
-			echo '<img data-id="' . $logo_id . '" src="' . esc_url($logo_src[0]) . '" />';
-		}
-	}
- 
+function aces_display_logo_column($column_name, $post_id)
+{
+
+    if ($column_name == 'featured_logo') {
+        if (has_post_thumbnail($post_id)) {
+            $logo_src = wp_get_attachment_image_src(get_post_thumbnail_id($post_id), 'thumbnail');
+            $logo_id = get_post_thumbnail_id($post_id);
+            echo '<img data-id="' . $logo_id . '" src="' . esc_url($logo_src[0]) . '" />';
+        }
+    }
 }
 
 add_action('manage_posts_custom_column', 'aces_display_logo_column', 10, 2);
 
 /* --- Add CSS styles for the custom logo column --- */
 
-function aces_custom_logo_css(){
- 
-	echo '<style>
+function aces_custom_logo_css()
+{
+
+    echo '<style>
 		#featured_logo {
 			width: 100px;
 		}
@@ -264,10 +317,9 @@ function aces_custom_logo_css(){
 			border-radius: 5px;
 		}
 	</style>';
- 
 }
 
-add_action( 'admin_head', 'aces_custom_logo_css' );
+add_action('admin_head', 'aces_custom_logo_css');
 
 /*  Add a logo image column in the admin panel - End  */
 
@@ -275,50 +327,53 @@ add_action( 'admin_head', 'aces_custom_logo_css' );
 
 /*  ---  Casinos  ---  */
 
-function aces_item_id_column_organization( $column_ars ) {
+function aces_item_id_column_organization($column_ars)
+{
 
-	$column_ars = array_slice( $column_ars, 0, 3, true )
-	+ array('aces_item_id' => 'Item ID')
-	+ array_slice( $column_ars, 1, NULL, true );
-	return $column_ars;
+    $column_ars = array_slice($column_ars, 0, 3, true)
+        + array('aces_item_id' => 'Item ID')
+        + array_slice($column_ars, 1, NULL, true);
+    return $column_ars;
 }
 
 add_filter('manage_casino_posts_columns', 'aces_item_id_column_organization');
 
 /*  ---  Games  ---  */
 
-function aces_item_id_column_unit( $column_ars ) {
+function aces_item_id_column_unit($column_ars)
+{
 
-	$column_ars = array_slice( $column_ars, 0, 3, true )
-	+ array('aces_item_id' => 'Item ID')
-	+ array_slice( $column_ars, 1, NULL, true );
-	return $column_ars;
+    $column_ars = array_slice($column_ars, 0, 3, true)
+        + array('aces_item_id' => 'Item ID')
+        + array_slice($column_ars, 1, NULL, true);
+    return $column_ars;
 }
 
 add_filter('manage_game_posts_columns', 'aces_item_id_column_unit');
 
 /*  ---  Bonuses  ---  */
 
-function aces_item_id_column_offer( $column_ars ) {
+function aces_item_id_column_offer($column_ars)
+{
 
-	$column_ars = array_slice( $column_ars, 0, 3, true )
-	+ array('aces_item_id' => 'Item ID')
-	+ array_slice( $column_ars, 1, NULL, true );
-	return $column_ars;
+    $column_ars = array_slice($column_ars, 0, 3, true)
+        + array('aces_item_id' => 'Item ID')
+        + array_slice($column_ars, 1, NULL, true);
+    return $column_ars;
 }
 
 add_filter('manage_bonus_posts_columns', 'aces_item_id_column_offer');
 
 /*  ---  Display item ID column  ---  */
 
-function aces_display_item_id_column( $column_name, $post_id ) {
- 
-	if( $column_name == 'aces_item_id' ) {
-		if( $post_id ) {
-			echo '<strong>' . $post_id . '</strong>';
-		}
-	}
- 
+function aces_display_item_id_column($column_name, $post_id)
+{
+
+    if ($column_name == 'aces_item_id') {
+        if ($post_id) {
+            echo '<strong>' . $post_id . '</strong>';
+        }
+    }
 }
 
 add_action('manage_posts_custom_column', 'aces_display_item_id_column', 10, 2);
@@ -327,20 +382,21 @@ add_action('manage_posts_custom_column', 'aces_display_item_id_column', 10, 2);
 
 /*  The standard field for the upload Background image of casino/game single page - Start  */
 
-function aces_background_image_uploader( $name, $value = '') {
-	$image = ' button">' . esc_html__( 'Upload image', 'aces' );
-	$display = 'none';
- 
-	if( $image_attributes = wp_get_attachment_image_src( $value, 'mercury-2000-400' ) ) {
-		$image = '"><img src="' . $image_attributes[0] . '" style="max-width: 100%; width: auto; display: block;" />';
-		$display = 'block';
-	} 
- 
-	return '
+function aces_background_image_uploader($name, $value = '')
+{
+    $image = ' button">' . esc_html__('Upload image', 'aces');
+    $display = 'none';
+
+    if ($image_attributes = wp_get_attachment_image_src($value, 'mercury-2000-400')) {
+        $image = '"><img src="' . $image_attributes[0] . '" style="max-width: 100%; width: auto; display: block;" />';
+        $display = 'block';
+    }
+
+    return '
 	<div style="margin-top: 1em;">
 		<a href="#" style="display: inline-block;" class="aces_upload_background_button' . $image . '</a>
-		<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . esc_attr( $value ) . '" />
-		<a href="#" class="aces_remove_background_button components-button is-link is-destructive" style="margin-top: 1em; display:' . $display . '">' . esc_html__( 'Remove background image', 'aces' ) . '</a>
+		<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . esc_attr($value) . '" />
+		<a href="#" class="aces_remove_background_button components-button is-link is-destructive" style="margin-top: 1em; display:' . $display . '">' . esc_html__('Remove background image', 'aces') . '</a>
 	</div>';
 }
 
@@ -350,16 +406,17 @@ function aces_background_image_uploader( $name, $value = '') {
 
 /*  ---  Casinos  ---  */
 
-function aces_change_casino_body_classes($classes, $class) {
+function aces_change_casino_body_classes($classes, $class)
+{
     global $post;
     if ($post->post_type != 'casino') {
         return $classes;
     } else {
-        foreach($classes as &$str) {
-            if(strpos($str, 'single-casino') > -1) {
+        foreach ($classes as &$str) {
+            if (strpos($str, 'single-casino') > -1) {
                 $str = 'single-organization';
             }
-            if(strpos($str, 'casino-template-default') > -1) {
+            if (strpos($str, 'casino-template-default') > -1) {
                 $str = 'organization-template-default';
             }
         }
@@ -370,16 +427,17 @@ add_filter('body_class', 'aces_change_casino_body_classes', 10, 2);
 
 /*  ---  Games  ---  */
 
-function aces_change_game_body_classes($classes, $class) {
+function aces_change_game_body_classes($classes, $class)
+{
     global $post;
     if ($post->post_type != 'game') {
         return $classes;
     } else {
-        foreach($classes as &$str) {
-            if(strpos($str, 'single-game') > -1) {
+        foreach ($classes as &$str) {
+            if (strpos($str, 'single-game') > -1) {
                 $str = 'single-unit';
             }
-            if(strpos($str, 'game-template-default') > -1) {
+            if (strpos($str, 'game-template-default') > -1) {
                 $str = 'unit-template-default';
             }
         }
@@ -390,16 +448,17 @@ add_filter('body_class', 'aces_change_game_body_classes', 10, 2);
 
 /*  ---  Bonuses  ---  */
 
-function aces_change_bonus_body_classes($classes, $class) {
+function aces_change_bonus_body_classes($classes, $class)
+{
     global $post;
     if ($post->post_type != 'bonus') {
         return $classes;
     } else {
-        foreach($classes as &$str) {
-            if(strpos($str, 'single-bonus') > -1) {
+        foreach ($classes as &$str) {
+            if (strpos($str, 'single-bonus') > -1) {
                 $str = 'single-offer';
             }
-            if(strpos($str, 'bonus-template-default') > -1) {
+            if (strpos($str, 'bonus-template-default') > -1) {
                 $str = 'offer-template-default';
             }
         }
