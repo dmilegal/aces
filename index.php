@@ -149,6 +149,22 @@ function aces_get_main_casino_bonus_id($casino_id)
 
 /* ACES Get Main Casino Bonus End */
 
+/* ACES Get Main Casino Licence Start */
+
+function aces_get_main_casino_licence_term_id($casino_id)
+{
+    $casino_licences = wp_get_object_terms($casino_id, 'licence');
+    $main_licence = get_post_meta($casino_id, 'main_licence_for_casino', true);
+    var_dump($main_licence);
+
+    if ($main_licence) return intval($main_licence);
+    if (count($casino_licences) == 1) return $casino_licences[0]->term_id;
+
+    return 0;
+}
+
+/* ACES Get Main Casino Licence End */
+
 /*  Custom Aces Plugin Widgets Start  */
 
 include_once $aces_plugin_dir . '/widgets/casinos-widget-1.php';
