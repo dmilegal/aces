@@ -2,12 +2,12 @@
 function aces_casinos_shortcode_8($atts)
 {
 
-	if (apply_filters('geoip_object', '')) {
+	/*if (apply_filters('geoip_object', '')) {
 		$record = apply_filters('geoip_object', '');
 		$iso_code = $record->country->isoCode;
 		$country = $record->country->name;
 		$flag = $record->extra->flag;
-	}
+	}*/
 
 	ob_start();
 
@@ -25,7 +25,7 @@ function aces_casinos_shortcode_8($atts)
 		'title' => ''
 	), $atts));
 
-	if ($iso_code) {
+	/*if ($iso_code) {
 		$iso_code_id = get_terms(
 			array(
 				'taxonomy'     =>  'restricted-country',
@@ -35,7 +35,7 @@ function aces_casinos_shortcode_8($atts)
 				'fields'       =>  'ids'
 			)
 		);
-	}
+	}*/
 
 	if ($orderby == 'rating') {
 		$orderby = 'meta_value_num';
@@ -88,12 +88,12 @@ function aces_casinos_shortcode_8($atts)
 						'field'    => 'id',
 						'terms'    => $categories_id_array
 					),
-					array(
+					/*array(
 						'taxonomy' => 'restricted-country',
 						'field'    => 'term_id',
 						'terms' => $iso_code_id,
 						'operator'  => 'NOT IN',
-					),
+					),*/
 				),
 				'meta_key' => 'casino_overall_rating',
 				'orderby'  => $orderby,
@@ -107,12 +107,12 @@ function aces_casinos_shortcode_8($atts)
 				'posts_per_page' => $items_number,
 				'post_type'      => 'casino',
 				'tax_query' => array(
-					array(
+					/*array(
 						'taxonomy' => 'restricted-country',
 						'field'    => 'term_id',
 						'terms' => $iso_code_id,
 						'operator'  => 'NOT IN',
-					),
+					),*/
 				),
 				'post__in'       => $items_id_array,
 				'orderby'        => 'post__in',
@@ -125,12 +125,12 @@ function aces_casinos_shortcode_8($atts)
 				'posts_per_page' => $items_number,
 				'post_type'      => 'casino',
 				'tax_query' => array(
-					array(
+					/*array(
 						'taxonomy' => 'restricted-country',
 						'field'    => 'term_id',
 						'terms' => $iso_code_id,
 						'operator'  => 'NOT IN',
-					),
+					),*/
 				),
 				'post__not_in'   => $exclude_id_array,
 				'no_found_rows'  => true,
@@ -163,7 +163,6 @@ function aces_casinos_shortcode_8($atts)
 
 				<div class="lb-casino-selection__list">
 					<?php while ($casino_query->have_posts()) : $casino_query->the_post();
-						global $post;
 						get_template_part('theme-parts/cells/casino-card', null, ['casino_id' => get_the_ID(),]);
 					endwhile ?>
 				</div>

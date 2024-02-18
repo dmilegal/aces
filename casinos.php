@@ -526,9 +526,18 @@ function aces_casinos()
 	// regisster meta fields
 	register_post_meta('casino', 'main_bonus_for_casino', array(
 		'show_in_rest' => true,
-		'type' => 'string',
+		'type' => 'integer',
 		'single' => true,
 		'sanitize_callback' => 'sanitize_text_field',
+		'auth_callback' => function () {
+			return current_user_can('edit_posts');
+		}
+	));
+
+	register_post_meta('casino', 'main_licence_for_casino', array(
+		'show_in_rest' => true,
+		'type' => 'integer',
+		'single' => true,
 		'auth_callback' => function () {
 			return current_user_can('edit_posts');
 		}
@@ -1269,6 +1278,15 @@ function aces_casinos_ratings_save_fields($post_id)
 
 	if (isset($_POST['main_bonus_for_casino'])) {
 		update_post_meta($post_id, 'main_bonus_for_casino', sanitize_text_field(wp_unslash($_POST['main_bonus_for_casino'])));
+	}
+
+	if (isset($_POST['main_licence_for_casino'])) {
+		$licence = sanitize_text_field(wp_unslash($_POST['main_licence_for_casino']));
+
+		if (!has_term($licence, 'licence', $post_id))
+			$licence = "";
+
+		update_post_meta($post_id, 'main_licence_for_casino', $licence);
 	}
 
 	if (!wp_is_post_revision($post_id)) {
@@ -2635,3 +2653,45 @@ function aces_update_casino_est_image_upload($term_id, $tt_id)
 add_action('edited_casino-est', 'aces_update_casino_est_image_upload', 10, 2);
 
 /*  Add Established logo End  */
+
+function aces_main_licence()
+{
+	add_meta_box(
+		'aces_main_licence_meta_box',
+		esc_html__('Licence Settings', 'aces'),
+		'aces_main_licence_display_meta_box',
+		'casino',
+		'side',
+		'high'
+	);
+}
+add_action('add_meta_boxes', 'aces_main_licence');
+
+function aces_main_licence_display_meta_box($post)
+{
+
+	$main_licence = get_post_meta($post->ID, 'main_licence_for_casino', true);
+	$casino_licences = wp_get_object_terms($post->ID, 'licence');
+
+	if (empty($main_licence)) {
+		$main_licence = '';
+	}
+?>
+	<div class='inside'>
+		<p>
+			<label for="main_licence_for_casino_field"><b><?php _e('Main Licence', 'aces'); ?></b></label>
+			<select name="main_licence_for_casino" id="main_licence_for_casino_field" class="regular-text" style="width: calc(100% - 32px);">
+				<option value="" <?php selected($main_licence,  ''); ?>><?php _e('Select main licence...', 'aces'); ?></option>
+				<? foreach ($casino_licences as $licence) { ?>
+					<option value="<?= $licence->term_id ?>" <?php selected($main_licence,  $licence->term_id); ?>><?= $licence->name ?></option>
+				<? } ?>
+			</select>
+			<br><small><span>
+				<?= __("Main licence will be shown in the card and in the banner on the single page.", 'aces') ?>
+				<br>
+				<strong><?= __("Use only if the casino has multiple licences", 'aces') ?></strong>
+		</span></small>
+		</p>
+	</div>
+<?php
+}
