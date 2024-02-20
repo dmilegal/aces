@@ -112,8 +112,7 @@ function aces_casinos_shortcode_8($atts)
 						'field'    => 'term_id',
 						'terms' => $iso_code_id,
 						'operator'  => 'NOT IN',
-					),*/
-				),
+					),*/),
 				'post__in'       => $items_id_array,
 				'orderby'        => 'post__in',
 				'no_found_rows'  => true,
@@ -130,8 +129,7 @@ function aces_casinos_shortcode_8($atts)
 						'field'    => 'term_id',
 						'terms' => $iso_code_id,
 						'operator'  => 'NOT IN',
-					),*/
-				),
+					),*/),
 				'post__not_in'   => $exclude_id_array,
 				'no_found_rows'  => true,
 				'post_status'    => 'publish',
@@ -142,39 +140,17 @@ function aces_casinos_shortcode_8($atts)
 		}
 	}
 
-	$casino_query = new WP_Query($args);
 
-	if ($casino_query->have_posts()) {
+	get_template_part('theme-parts/organs/casino-list/casino-list', null, ['query_args' => $args]);
 
 ?>
 
-		<div class="lb-casino-selection">
-			<div class="lb-casino-selection__inner">
-				<?php
-
-				if (class_exists('Casino_Noref_Popup'))
-					echo do_shortcode('[ref_casinos_popup]');
-
-				if ($title) { ?>
-					<div class="lb-casino-selection__title">
-						<span><?php echo esc_html($title); ?></span>
-					</div>
-				<?php } ?>
-
-				<div class="lb-casino-selection__list">
-					<?php while ($casino_query->have_posts()) : $casino_query->the_post();
-						get_template_part('theme-parts/cells/casino-card', null, ['casino_id' => get_the_ID(),]);
-					endwhile ?>
-				</div>
-
-			</div>
-		</div>
+		
 
 <?php
-		wp_reset_postdata();
-		$casino_items = ob_get_clean();
-		return $casino_items;
-	}
+	wp_reset_postdata();
+	$casino_items = ob_get_clean();
+	return $casino_items;
 }
 
 add_shortcode('aces-casinos-8', 'aces_casinos_shortcode_8');
