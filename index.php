@@ -155,7 +155,6 @@ function aces_get_main_casino_licence_term_id($casino_id)
 {
     $casino_licences = wp_get_object_terms($casino_id, 'licence');
     $main_licence = get_post_meta($casino_id, 'main_licence_for_casino', true);
-    var_dump($main_licence);
 
     if ($main_licence) return intval($main_licence);
     if (count($casino_licences) == 1) return $casino_licences[0]->term_id;
@@ -164,6 +163,17 @@ function aces_get_main_casino_licence_term_id($casino_id)
 }
 
 /* ACES Get Main Casino Licence End */
+
+/* ACES Casino Has Licence Start */
+
+function aces_casino_has_licence($casino_id)
+{
+    $casino_licences = wp_get_object_terms($casino_id, 'licence');
+
+    return !!$casino_licences;
+}
+
+/* ACES Casino Has Licence End */
 
 /*  Custom Aces Plugin Widgets Start  */
 
