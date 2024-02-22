@@ -26,15 +26,24 @@ class Aces_Casino_Rest
     $items_html = [];
 
     if ($query->have_posts()) {
+      $ids = [];
       while ($query->have_posts()) {
         $query->the_post();
+        $ids[] = get_the_ID();
+      }
+
+      wp_reset_postdata();
+
+      $casino_list = $this->build_casino_list($request, $ids);
+
+      foreach ($casino_list as $casino) {
         ob_start();
-        get_template_part('aces/casino-card/default', null, ['casino_id' => get_the_ID()]);
+        get_template_part('aces/casino-card/default', null, [...$casino]);
         $items_html[] = ob_get_contents();
         ob_end_clean();
       }
     }
-    wp_reset_postdata();
+ 
     return [
       'html' => implode('', $items_html),
       'message' => count($items_html) ? __('Find casinos', 'aces') : __('No results', 'aces'),
@@ -81,6 +90,21 @@ class Aces_Casino_Rest
 
   private function build_query_args(WP_REST_Request $request)
   {
-    return $request->get_query_params();
+    $params =$request->get_query_params();
+
+    return $params['query'] ?? [];
+  }
+
+  private function build_casino_list(WP_REST_Request $request, $ids)
+  {
+    $params = $request->get_query_params();
+    $full_list = $params['full_list'] ?? [];
+    $casino_list = [];
+    foreach ($ids as $id) {
+      $params = array_values(array_filter($full_list, fn ($c) => $c['casino_id'] == $id));
+      $casino_list[] = ['casino_id' => $id, ...($params ? $params[0] : [])];
+    }
+    
+    return $casino_list;
   }
 }
