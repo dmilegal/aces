@@ -3,7 +3,6 @@
 /*  Casinos - Post Type Start */
 
 add_action('init', 'aces_casinos', 0);
-
 function aces_casinos()
 {
 
