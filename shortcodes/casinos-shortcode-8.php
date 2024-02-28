@@ -142,7 +142,7 @@ function aces_casinos_shortcode_8($atts)
 
 
 
-	get_template_part('aces/casino-list/casino-list', null, ['theme' => 'inline', 'query_args' => $args]);
+	get_template_part('aces/casino-list/default', null, ['query_args' => $args]);
 
 ?>
 
