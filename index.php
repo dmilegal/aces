@@ -440,7 +440,7 @@ function aces_background_image_uploader($name, $value = '')
 function aces_change_casino_body_classes($classes, $class)
 {
     global $post;
-    if ($post->post_type != 'casino') {
+    if (!$post || $post->post_type != 'casino') {
         return $classes;
     } else {
         foreach ($classes as &$str) {
@@ -460,8 +460,10 @@ add_filter('body_class', 'aces_change_casino_body_classes', 10, 2);
 
 function aces_change_game_body_classes($classes, $class)
 {
+   
     global $post;
-    if ($post->post_type != 'game') {
+
+    if (!$post || $post->post_type != 'game') {
         return $classes;
     } else {
         foreach ($classes as &$str) {
@@ -482,7 +484,7 @@ add_filter('body_class', 'aces_change_game_body_classes', 10, 2);
 function aces_change_bonus_body_classes($classes, $class)
 {
     global $post;
-    if ($post->post_type != 'bonus') {
+    if (!$post || $post->post_type != 'bonus') {
         return $classes;
     } else {
         foreach ($classes as &$str) {
