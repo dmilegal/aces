@@ -65,7 +65,7 @@ function aces_casinos_shortcode_8($atts)
 			),
 			'post__not_in'   => $exclude_id_array,
 			'no_found_rows'  => true,
-			'post_status'    => 'publish',
+			'post_status'    => ['draft', 'publish', 'private'],
 			'meta_key'       => 'casino_overall_rating',
 			'orderby'        => 'meta_value_num',
 			'order'          => $order
@@ -81,7 +81,7 @@ function aces_casinos_shortcode_8($atts)
 				'post_type'      => 'casino',
 				'post__not_in'   => $exclude_id_array,
 				'no_found_rows'  => true,
-				'post_status'    => 'publish',
+				'post_status'    => ['draft', 'publish', 'private'],
 				'tax_query' => array(
 					array(
 						'taxonomy' => 'casino-category',
@@ -116,7 +116,7 @@ function aces_casinos_shortcode_8($atts)
 				'post__in'       => $items_id_array,
 				'orderby'        => 'post__in',
 				'no_found_rows'  => true,
-				'post_status'    => 'publish'
+				'post_status'    => ['draft', 'publish', 'private']
 			);
 		} else {
 
@@ -132,7 +132,7 @@ function aces_casinos_shortcode_8($atts)
 					),*/),
 				'post__not_in'   => $exclude_id_array,
 				'no_found_rows'  => true,
-				'post_status'    => 'publish',
+				'post_status'    => ['draft', 'publish', 'private'],
 				'meta_key'       => 'casino_overall_rating',
 				'orderby'        => $orderby,
 				'order'          => $order
