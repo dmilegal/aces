@@ -505,8 +505,9 @@ function aces_bonuses_display_casinos_list_meta_box($bonus)
 			$elements[$casino->ID] = $casino->post_title;
 		}
 	?>
+		<input type="search" placeholder="Type to search..." style="width: 100%; margin-bottom: 8px;" class="aces-search-in-list" data-list="#casinos-list" />
 		<div style="max-height:200px; overflow-y:auto;">
-			<ul>
+			<ul id="casinos-list">
 				<?php foreach ($elements as $id => $element) {
 
 					if (is_array($postmeta) && in_array($id, $postmeta)) {
