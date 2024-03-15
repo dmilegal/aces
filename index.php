@@ -258,7 +258,9 @@ function aces_image_uploader()
         }
 
         wp_register_script('aces-image-uploader', plugin_dir_url(__FILE__) . 'js/image-uploader.js', array('jquery'), '2.4');
+        wp_register_script('aces-filtering', plugin_dir_url(__FILE__) . 'js/filtering.js', array('jquery'), '2.4');
         wp_enqueue_script('aces-image-uploader');
+        wp_enqueue_script('aces-filtering');
     }
 }
 add_action('admin_enqueue_scripts', 'aces_image_uploader');
