@@ -497,7 +497,7 @@ function aces_bonuses_display_casinos_list_meta_box($bonus)
 	wp_nonce_field(basename(__FILE__), 'bonus_custom_nonce');
 
 	$postmeta = get_post_meta($bonus->ID, 'bonus_parent_casino', true);
-	$casinos = get_posts(array('post_type' => 'casino', 'posts_per_page' => -1, 'orderby' => 'post_title', 'order' => 'ASC'));
+	$casinos = get_posts(array('post_type' => 'casino', 'post_status' => 'any',  'posts_per_page' => -1, 'orderby' => 'post_title', 'order' => 'ASC'));
 
 	if ($casinos) {
 		$elements = [];

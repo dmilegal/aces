@@ -1626,6 +1626,7 @@ function aces_casinos_display_bonuses_list_meta_box($post)
 			'posts_per_page' => -1,
 			'orderby' => 'post_title',
 			'order' => 'ASC',
+			'post_status' => 'any',
 			'meta_query' => array(
 				array(
 					'key' => 'bonus_parent_casino',
