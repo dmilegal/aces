@@ -557,3 +557,97 @@ function aces_bonuses_casinos_save_fields($post_id)
 };
 
 /*  Relationship of the Bonus and Casino End  */
+
+/* Start custom column for bonuses admin page */
+// Add the custom columns to the book post type:
+add_filter('manage_bonus_posts_columns', 'set_custom_edit_bonus_columns');
+function set_custom_edit_bonus_columns($columns)
+{
+	$columns['bonus_parent_casino'] = __('Casinos', 'aces');
+
+	return $columns;
+}
+
+function bonus_column_content($column, $post_id)
+{
+	switch ($column) {
+		case 'bonus_parent_casino':
+			$bonus_parent_casino = get_post_meta($post_id, 'bonus_parent_casino', true);
+			if (!empty($bonus_parent_casino)) {
+				$casino_titles = [];
+				foreach ($bonus_parent_casino as $casino_id) {
+					$casino_titles[] = '<a target="_blank" href="' . get_edit_post_link($casino_id) . '">' . get_the_title($casino_id) . '</a>';
+				};
+
+				echo implode(', ', $casino_titles);
+			}
+			break;
+	}
+}
+add_action('manage_bonus_posts_custom_column', 'bonus_column_content', 10, 2);
+/* End custom column for bonuses admin page */
+
+
+/* Start custom filter for bonuses admin page */
+add_action('restrict_manage_posts', 'filter_bonus_by_custom_field_status', 10, 2);
+function filter_bonus_by_custom_field_status($post_type, $which)
+{
+	if ($post_type === 'bonus') {
+		$meta_key = 'bonus_parent_casino';
+		$options = array(
+			''       => __('All casinos', 'aces'),
+		);
+
+		$casino_posts = new WP_Query(array(
+			'post_type' => 'casino',
+			'posts_per_page' => -1,
+			'post_status' => "any",
+			'orderby' => 'title',
+			'order' => 'ASC'
+		));
+
+		$posts = $casino_posts->posts;
+
+		foreach ($posts as $post) {
+			$options[$post->ID] =  $post->post_title;
+		};
+
+
+		echo "<select name='{$meta_key}' id='{$meta_key}' class='postform'>";
+		foreach ($options as $value => $name) {
+			printf(
+				'<option value="%1$s" %2$s>%3$s</option>',
+				esc_attr($value),
+				((isset($_GET[$meta_key]) && ($_GET[$meta_key] == $value)) ? ' selected="selected"' : ''),
+				esc_html($name)
+			);
+		}
+		echo '</select>';
+	}
+}
+
+add_filter('parse_query', 'filter_bonus_parse_query_custom_field_status');
+function filter_bonus_parse_query_custom_field_status($query)
+{
+	global $pagenow;
+
+	$meta_key = 'bonus_parent_casino';
+	$value = $_GET[$meta_key] ?? '';
+	
+	
+	if ($query->is_main_query() && is_admin() && 'edit.php' === $pagenow && $value && isset($_GET['post_type']) && 'bonus' === $_GET['post_type']) {
+		$query_vars = &$query->query_vars;
+
+		$query_vars['meta_query'] = $query_vars['meta_query'] ?? array();
+
+		if (!empty($_GET[$meta_key])) {
+			$query_vars['meta_query'][] = array(
+				'key' => $meta_key,
+				'value' => $value,
+				'compare' => 'LIKE',
+			);
+		}
+	}
+}
+
+/* End custom filter for bonuses admin page */
