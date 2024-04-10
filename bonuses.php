@@ -357,13 +357,6 @@ function aces_bonuses_display_meta_box($bonus)
 		</div>
 	</div>
 
-	<div class="components-base-control bonus_external_link">
-		<div class="components-base-control__field">
-			<label class="components-base-control__label" for="bonus_external_link-0"><?php esc_html_e('External URL for the', 'aces') ?> <strong><?php esc_html_e('Get Bonus', 'aces'); ?></strong> <?php esc_html_e('button', 'aces'); ?></label>
-			<input type="url" name="bonus_external_link" id="bonus_external_link-0" value="<?php echo esc_url($bonus_external_link); ?>" style="display: block; margin-bottom: 10px;" />
-		</div>
-	</div>
-
 	<div class="components-base-control bonus_button_title">
 		<div class="components-base-control__field">
 			<label class="components-base-control__label" for="bonus_button_title-0"><?php esc_html_e('Custom title for the', 'aces') ?> <strong><?php esc_html_e('Get Bonus', 'aces'); ?></strong> <?php esc_html_e('button', 'aces'); ?></label>
