@@ -59,6 +59,14 @@ include_once $aces_plugin_dir . '/settings/casinos-rest.php';
 
 include_once $aces_plugin_dir . '/casinos.php';
 
+/*  ---  Bookmakers  ---  */
+
+include_once $aces_plugin_dir . '/bookmakers.php';
+
+/*  ---  Casinos/Bookmakers  ---  */
+
+include_once $aces_plugin_dir . '/bookmaker-casinos.php';
+
 /*  ---  Units  ---  */
 
 include_once $aces_plugin_dir . '/games.php';
