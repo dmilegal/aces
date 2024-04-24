@@ -1,5 +1,546 @@
 <?
-/*  Casinos/Bookmakers - Post Type End */
+const ACES_MIXED_POST_TYPES = ['casino', 'bookmaker'];
+
+
+add_action('init', 'aces_casinos_bookmaker', 0);
+function aces_casinos_bookmaker()
+{
+	/* --- Software: Custom Taxonomy --- */
+
+	$casinos_software_title = esc_html__('Software', 'aces');
+	if (get_option('casinos_software_title')) {
+		$casinos_software_title = get_option('casinos_software_title', 'Software');
+	}
+
+	$labels = array(
+		'name' => $casinos_software_title,
+		'singular_name' => $casinos_software_title,
+		'search_items' => esc_html__('Find Taxonomy', 'aces'),
+		'all_items' => esc_html__('All ', 'aces') . $casinos_software_title,
+		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
+		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
+		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
+		'view_item' => esc_html__('View Taxonomy', 'aces'),
+		'update_item' => esc_html__('Update Taxonomy', 'aces'),
+		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
+		'new_item_name' => esc_html__('Taxonomy', 'aces'),
+		'menu_name' => $casinos_software_title
+	);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'show_in_nav_menus' => true,
+		'show_ui' => true,
+		'show_in_rest' => true,
+		'show_tagcloud' => true,
+		'hierarchical' => true,
+		'update_count_callback' => '',
+		'rewrite' => true,
+		'query_var' => '',
+		'capabilities' => array(),
+		'_builtin' => false
+	);
+
+	register_taxonomy('software', ACES_MIXED_POST_TYPES, $args);
+
+	/* --- Deposit Methods: Custom Taxonomy --- */
+
+	$casinos_deposit_method_title = esc_html__('Deposit Methods', 'aces');
+	if (get_option('casinos_deposit_method_title')) {
+		$casinos_deposit_method_title = get_option('casinos_deposit_method_title', 'Deposit Methods');
+	}
+
+	$labels = array(
+		'name' => $casinos_deposit_method_title,
+		'singular_name' => $casinos_deposit_method_title,
+		'search_items' => esc_html__('Find Taxonomy', 'aces'),
+		'all_items' => esc_html__('All ', 'aces') . $casinos_deposit_method_title,
+		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
+		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
+		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
+		'view_item' => esc_html__('View Taxonomy', 'aces'),
+		'update_item' => esc_html__('Update Taxonomy', 'aces'),
+		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
+		'new_item_name' => esc_html__('Taxonomy', 'aces'),
+		'menu_name' => $casinos_deposit_method_title
+	);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'show_in_nav_menus' => true,
+		'show_ui' => true,
+		'show_in_rest' => true,
+		'show_tagcloud' => true,
+		'hierarchical' => true,
+		'update_count_callback' => '',
+		'rewrite' => true,
+		'query_var' => '',
+		'capabilities' => array(),
+		'_builtin' => false
+	);
+
+	register_taxonomy('deposit-method', ACES_MIXED_POST_TYPES, $args);
+
+	/* --- Withdrawal Methods: Custom Taxonomy --- */
+
+	$casinos_withdrawal_method_title = esc_html__('Withdrawal Methods', 'aces');
+	if (get_option('casinos_withdrawal_method_title')) {
+		$casinos_withdrawal_method_title = get_option('casinos_withdrawal_method_title', 'Withdrawal Methods');
+	}
+
+	$labels = array(
+		'name' => $casinos_withdrawal_method_title,
+		'singular_name' => $casinos_withdrawal_method_title,
+		'search_items' => esc_html__('Find Taxonomy', 'aces'),
+		'all_items' => esc_html__('All ', 'aces') . $casinos_withdrawal_method_title,
+		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
+		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
+		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
+		'view_item' => esc_html__('View Taxonomy', 'aces'),
+		'update_item' => esc_html__('Update Taxonomy', 'aces'),
+		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
+		'new_item_name' => esc_html__('Taxonomy', 'aces'),
+		'menu_name' => $casinos_withdrawal_method_title
+	);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'show_in_nav_menus' => true,
+		'show_ui' => true,
+		'show_in_rest' => true,
+		'show_tagcloud' => true,
+		'hierarchical' => true,
+		'update_count_callback' => '',
+		'rewrite' => true,
+		'query_var' => '',
+		'capabilities' => array(),
+		'_builtin' => false
+	);
+
+	register_taxonomy('withdrawal-method', ACES_MIXED_POST_TYPES, $args);
+
+	/* --- Withdrawal Limits: Custom Taxonomy --- */
+
+	$casinos_withdrawal_limit_title = esc_html__('Withdrawal Limits', 'aces');
+	if (get_option('casinos_withdrawal_limit_title')) {
+		$casinos_withdrawal_limit_title = get_option('casinos_withdrawal_limit_title', 'Withdrawal Limits');
+	}
+
+	$labels = array(
+		'name' => $casinos_withdrawal_limit_title,
+		'singular_name' => $casinos_withdrawal_limit_title,
+		'search_items' => esc_html__('Find Taxonomy', 'aces'),
+		'all_items' => esc_html__('All ', 'aces') . $casinos_withdrawal_limit_title,
+		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
+		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
+		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
+		'view_item' => esc_html__('View Taxonomy', 'aces'),
+		'update_item' => esc_html__('Update Taxonomy', 'aces'),
+		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
+		'new_item_name' => esc_html__('Taxonomy', 'aces'),
+		'menu_name' => $casinos_withdrawal_limit_title
+	);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'show_in_nav_menus' => true,
+		'show_ui' => true,
+		'show_in_rest' => true,
+		'show_tagcloud' => true,
+		'hierarchical' => true,
+		'update_count_callback' => '',
+		'rewrite' => true,
+		'query_var' => '',
+		'capabilities' => array(),
+		'_builtin' => false
+	);
+
+	register_taxonomy('withdrawal-limit', ACES_MIXED_POST_TYPES, $args);
+
+	/* --- Restricted Countries: Custom Taxonomy --- */
+
+	$casinos_restricted_countries_title = esc_html__('Restricted Countries', 'aces');
+	if (get_option('casinos_restricted_countries_title')) {
+		$casinos_restricted_countries_title = get_option('casinos_restricted_countries_title', 'Restricted Countries');
+	}
+
+	$labels = array(
+		'name' => $casinos_restricted_countries_title,
+		'singular_name' => $casinos_restricted_countries_title,
+		'search_items' => esc_html__('Find Taxonomy', 'aces'),
+		'all_items' => esc_html__('All ', 'aces') . $casinos_restricted_countries_title,
+		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
+		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
+		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
+		'view_item' => esc_html__('View Taxonomy', 'aces'),
+		'update_item' => esc_html__('Update Taxonomy', 'aces'),
+		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
+		'new_item_name' => esc_html__('Taxonomy', 'aces'),
+		'menu_name' => $casinos_restricted_countries_title
+	);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'show_in_nav_menus' => true,
+		'show_ui' => true,
+		'show_in_rest' => true,
+		'show_tagcloud' => true,
+		'hierarchical' => true,
+		'update_count_callback' => '',
+		'rewrite' => true,
+		'query_var' => '',
+		'capabilities' => array(),
+		'_builtin' => false
+	);
+
+	register_taxonomy('restricted-country', ACES_MIXED_POST_TYPES, $args);
+
+	/* --- Licences: Custom Taxonomy --- */
+
+	$casinos_licences_title = esc_html__('Licences', 'aces');
+	if (get_option('casinos_licences_title')) {
+		$casinos_licences_title = get_option('casinos_licences_title', 'Licences');
+	}
+
+	$labels = array(
+		'name' => $casinos_licences_title,
+		'singular_name' => $casinos_licences_title,
+		'search_items' => esc_html__('Find Taxonomy', 'aces'),
+		'all_items' => esc_html__('All ', 'aces') . $casinos_licences_title,
+		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
+		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
+		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
+		'view_item' => esc_html__('View Taxonomy', 'aces'),
+		'update_item' => esc_html__('Update Taxonomy', 'aces'),
+		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
+		'new_item_name' => esc_html__('Taxonomy', 'aces'),
+		'menu_name' => $casinos_licences_title
+	);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'show_in_nav_menus' => true,
+		'show_ui' => true,
+		'show_in_rest' => true,
+		'show_tagcloud' => true,
+		'hierarchical' => true,
+		'update_count_callback' => '',
+		'rewrite' => true,
+		'query_var' => '',
+		'capabilities' => array(),
+		'_builtin' => false
+	);
+
+	register_taxonomy('licence', ACES_MIXED_POST_TYPES, $args);
+
+	/* --- Languages: Custom Taxonomy --- */
+
+	$casinos_languages_title = esc_html__('Languages', 'aces');
+	if (get_option('casinos_languages_title')) {
+		$casinos_languages_title = get_option('casinos_languages_title', 'Languages');
+	}
+
+	$labels = array(
+		'name' => $casinos_languages_title,
+		'singular_name' => $casinos_languages_title,
+		'search_items' => esc_html__('Find Taxonomy', 'aces'),
+		'all_items' => esc_html__('All ', 'aces') . $casinos_languages_title,
+		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
+		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
+		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
+		'view_item' => esc_html__('View Taxonomy', 'aces'),
+		'update_item' => esc_html__('Update Taxonomy', 'aces'),
+		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
+		'new_item_name' => esc_html__('Taxonomy', 'aces'),
+		'menu_name' => $casinos_languages_title
+	);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'show_in_nav_menus' => true,
+		'show_ui' => true,
+		'show_in_rest' => true,
+		'show_tagcloud' => true,
+		'hierarchical' => true,
+		'update_count_callback' => '',
+		'rewrite' => true,
+		'query_var' => '',
+		'capabilities' => array(),
+		'_builtin' => false
+	);
+
+	register_taxonomy('casino-language', ACES_MIXED_POST_TYPES, $args);
+
+	/* --- Currencies: Custom Taxonomy --- */
+
+	$casinos_currencies_title = esc_html__('Currencies', 'aces');
+	if (get_option('casinos_currencies_title')) {
+		$casinos_currencies_title = get_option('casinos_currencies_title', 'Currencies');
+	}
+
+	$labels = array(
+		'name' => $casinos_currencies_title,
+		'singular_name' => $casinos_currencies_title,
+		'search_items' => esc_html__('Find Taxonomy', 'aces'),
+		'all_items' => esc_html__('All ', 'aces') . $casinos_currencies_title,
+		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
+		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
+		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
+		'view_item' => esc_html__('View Taxonomy', 'aces'),
+		'update_item' => esc_html__('Update Taxonomy', 'aces'),
+		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
+		'new_item_name' => esc_html__('Taxonomy', 'aces'),
+		'menu_name' => $casinos_currencies_title
+	);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'show_in_nav_menus' => true,
+		'show_ui' => true,
+		'show_in_rest' => true,
+		'show_tagcloud' => true,
+		'hierarchical' => true,
+		'update_count_callback' => '',
+		'rewrite' => true,
+		'query_var' => '',
+		'capabilities' => array(),
+		'_builtin' => false
+	);
+
+	register_taxonomy('currency', ACES_MIXED_POST_TYPES, $args);
+
+	/* --- Devices: Custom Taxonomy --- */
+
+	$casinos_devices_title = esc_html__('Devices', 'aces');
+	if (get_option('casinos_devices_title')) {
+		$casinos_devices_title = get_option('casinos_devices_title', 'Devices');
+	}
+
+	$labels = array(
+		'name' => $casinos_devices_title,
+		'singular_name' => $casinos_devices_title,
+		'search_items' => esc_html__('Find Taxonomy', 'aces'),
+		'all_items' => esc_html__('All ', 'aces') . $casinos_devices_title,
+		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
+		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
+		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
+		'view_item' => esc_html__('View Taxonomy', 'aces'),
+		'update_item' => esc_html__('Update Taxonomy', 'aces'),
+		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
+		'new_item_name' => esc_html__('Taxonomy', 'aces'),
+		'menu_name' => $casinos_devices_title
+	);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'show_in_nav_menus' => true,
+		'show_ui' => true,
+		'show_in_rest' => true,
+		'show_tagcloud' => true,
+		'hierarchical' => true,
+		'update_count_callback' => '',
+		'rewrite' => true,
+		'query_var' => '',
+		'capabilities' => array(),
+		'_builtin' => false
+	);
+
+	register_taxonomy('device', ACES_MIXED_POST_TYPES, $args);
+
+	/* --- Owner: Custom Taxonomy --- */
+
+	$casinos_owner_title = esc_html__('Owner', 'aces');
+	if (get_option('casinos_owner_title')) {
+		$casinos_owner_title = get_option('casinos_owner_title', 'Owner');
+	}
+
+	$labels = array(
+		'name' => $casinos_owner_title,
+		'singular_name' => $casinos_owner_title,
+		'search_items' => esc_html__('Find Taxonomy', 'aces'),
+		'all_items' => esc_html__('All ', 'aces') . $casinos_owner_title,
+		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
+		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
+		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
+		'view_item' => esc_html__('View Taxonomy', 'aces'),
+		'update_item' => esc_html__('Update Taxonomy', 'aces'),
+		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
+		'new_item_name' => esc_html__('Taxonomy', 'aces'),
+		'menu_name' => $casinos_owner_title
+	);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'show_in_nav_menus' => true,
+		'show_ui' => true,
+		'show_in_rest' => true,
+		'show_tagcloud' => true,
+		'hierarchical' => true,
+		'update_count_callback' => '',
+		'rewrite' => true,
+		'query_var' => '',
+		'capabilities' => array(),
+		'_builtin' => false
+	);
+
+	register_taxonomy('owner', ACES_MIXED_POST_TYPES, $args);
+
+	/* --- Established: Custom Taxonomy --- */
+
+	$casinos_est_title = esc_html__('Established', 'aces');
+	if (get_option('casinos_est_title')) {
+		$casinos_est_title = get_option('casinos_est_title', 'Established');
+	}
+
+	$labels = array(
+		'name' => $casinos_est_title,
+		'singular_name' => $casinos_est_title,
+		'search_items' => esc_html__('Find Taxonomy', 'aces'),
+		'all_items' => esc_html__('All ', 'aces') . $casinos_est_title,
+		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
+		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
+		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
+		'view_item' => esc_html__('View Taxonomy', 'aces'),
+		'update_item' => esc_html__('Update Taxonomy', 'aces'),
+		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
+		'new_item_name' => esc_html__('Taxonomy', 'aces'),
+		'menu_name' => $casinos_est_title
+	);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'show_in_nav_menus' => true,
+		'show_ui' => true,
+		'show_in_rest' => true,
+		'show_tagcloud' => true,
+		'hierarchical' => true,
+		'update_count_callback' => '',
+		'rewrite' => true,
+		'query_var' => '',
+		'capabilities' => array(),
+		'_builtin' => false
+	);
+
+	register_taxonomy('casino-est', ACES_MIXED_POST_TYPES, $args);
+
+	foreach (ACES_MIXED_POST_TYPES as $post_type) {
+		// regisster meta fields
+		register_post_meta($post_type, 'main_bonus_for_casino', array(
+			'show_in_rest' => true,
+			'type' => 'integer',
+			'single' => true,
+			'sanitize_callback' => 'sanitize_text_field',
+			'auth_callback' => function () {
+				return current_user_can('edit_posts');
+			}
+		));
+
+		register_post_meta($post_type, 'main_licence_for_casino', array(
+			'show_in_rest' => true,
+			'type' => 'integer',
+			'single' => true,
+			'auth_callback' => function () {
+				return current_user_can('edit_posts');
+			}
+		));
+	}
+}
+
+
+/*  Display the Relationship of the Casino/Bookmaker and Bonuses Start  */
+
+add_action('admin_init', 'aces_casinos_bonuses_list');
+
+function aces_casinos_bonuses_list()
+{
+
+	$bonuses_section_name = esc_html__('Bonuses', 'aces');
+	if (get_option('bonuses_section_name')) {
+		$bonuses_section_name = esc_html__(get_option('bonuses_section_name'));
+	}
+
+	add_meta_box(
+		'aces_casinos_bonuses_list_meta_box',
+		$bonuses_section_name,
+		'aces_casinos_display_bonuses_list_meta_box',
+		ACES_MIXED_POST_TYPES,
+		'side',
+		'high'
+	);
+}
+
+function aces_casinos_display_bonuses_list_meta_box($post)
+{
+	$post_id_related = '"' . $post->ID . '"';
+	$bonuses = get_posts(
+		array(
+			'post_type' => 'bonus',
+			'posts_per_page' => -1,
+			'orderby' => 'post_title',
+			'order' => 'ASC',
+			'post_status' => 'any',
+			'meta_query' => array(
+				array(
+					'key' => 'bonus_parent_casino',
+					'value' => $post_id_related,
+					'compare' => 'LIKE'
+				)
+			)
+		)
+	);
+
+	if ($bonuses) {
+?>
+		<div style="max-height:200px; overflow-y:auto;">
+			<ul>
+				<?php foreach ($bonuses as $bonus) { ?>
+					<li><a href="<?php echo esc_url(get_permalink($bonus->ID)); ?>" title="<?php esc_html_e($bonus->post_title); ?>" target="_blank"><?php esc_html_e($bonus->post_title); ?></a></li>
+				<?php } ?>
+			</ul>
+		</div>
+		<div>
+			<? $value = get_post_meta($post->ID, 'main_bonus_for_casino', true); ?>
+			<p>
+				<label for="main_bonus_for_casino_field" class="strong">
+					<strong><?= __("Main Bonus", 'aces') ?></strong>
+				</label>
+			</p>
+			<select name="main_bonus_for_casino" id="main_bonus_for_casino_field" style="width: calc(100% - 32px);">
+				<option value="" <?php selected($value,  ""); ?>><?= __('Not show', 'aces') ?></option>
+				<option value="random" <?php selected($value,  "random"); ?>><?= __('Random', 'aces') ?></option>
+				<?php foreach ($bonuses as $bonus) { ?>
+					<option value="<?= $bonus->ID ?>" <?php selected($value,  $bonus->ID); ?>><?php esc_html_e($bonus->post_title); ?></option>
+				<?php } ?>
+			</select>
+			<span><?= __("Main bonus will be shown in the card and in the sidebar on the single page", 'aces') ?></span>
+		</div>
+	<?php
+	} else {
+		esc_html_e('No items', 'aces');
+	}
+}
+
+/*  Display the Relationship of the Casino and Bonuses End  */
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////
 
 /*  Casinos/Bookmakers - Short Description Start */
 
@@ -11,7 +552,7 @@ function aces_organizations_short_fields()
 		'aces_organizations_short_meta_box',
 		esc_html__('Short Description', 'aces'),
 		'aces_organizations_short_display_meta_box',
-		['casino', 'bookmaker'],
+		ACES_MIXED_POST_TYPES,
 		'normal',
 		'high'
 	);
@@ -34,7 +575,7 @@ function aces_organizations_short_display_meta_box($casino)
 		'media_buttons' => false,
 		'textarea_rows' => 4
 	);
-?>
+	?>
 
 	<div class="components-base-control casino_short_desc">
 		<div class="components-base-control__field">
@@ -91,7 +632,7 @@ function aces_organizations_promo_fields()
 		'aces_organizations_promo_meta_box',
 		esc_html__('Promotional Description', 'aces'),
 		'aces_organizations_promo_display_meta_box',
-		['casino', 'bookmaker'],
+		ACES_MIXED_POST_TYPES,
 		'normal',
 		'high'
 	);
@@ -171,7 +712,7 @@ function aces_casinos_detailed_tc_fields()
 		'aces_casinos_detailed_tc_meta_box',
 		esc_html__('Detailed T&Cs', 'aces'),
 		'aces_casinos_detailed_tc_display_meta_box',
-		['casino', 'bookmaker'],
+		ACES_MIXED_POST_TYPES,
 		'normal',
 		'high'
 	);
@@ -274,7 +815,7 @@ function aces_casinos_ratings_fields()
 		'aces_casinos_ratings_meta_box',
 		esc_html__('Item Ratings', 'aces'),
 		'aces_casinos_ratings_display_meta_box',
-		['casino', 'bookmaker'],
+		ACES_MIXED_POST_TYPES,
 		'normal',
 		'high'
 	);
@@ -514,7 +1055,7 @@ function aces_casino_background_image_block()
 		'aces_background_image_box',
 		esc_html__('Background Image', 'aces'),
 		'aces_casino_background_image_block_show',
-		['casino', 'bookmaker'],
+		ACES_MIXED_POST_TYPES,
 		'normal',
 		'core'
 	);
@@ -570,7 +1111,7 @@ function aces_casinos_fields()
 		'aces_casinos_meta_box',
 		esc_html__('Additional information', 'aces'),
 		'aces_casinos_display_meta_box',
-		['casino', 'bookmaker'],
+		ACES_MIXED_POST_TYPES,
 		'side',
 		'high'
 	);
@@ -745,7 +1286,7 @@ function aces_casinos_games_list()
 		'aces_casinos_games_list_meta_box',
 		$games_section_name,
 		'aces_casinos_display_games_list_meta_box',
-		['casino', 'bookmaker'],
+		ACES_MIXED_POST_TYPES,
 		'side',
 		'high'
 	);
@@ -784,5 +1325,56 @@ function aces_casinos_display_games_list_meta_box($post)
 		esc_html_e('No items', 'aces');
 	}
 }
+///////////////////////////////////////////////////
+
+
+
+/*  Add Established logo End  */
+
 
 /*  Display the Relationship of the Casino and Games End  */
+
+/////////////////////////////////////////////////////////
+
+/** License */
+function aces_main_licence()
+{
+	add_meta_box(
+		'aces_main_licence_meta_box',
+		esc_html__('Licence Settings', 'aces'),
+		'aces_main_licence_display_meta_box',
+		ACES_MIXED_POST_TYPES,
+		'side',
+		'high'
+	);
+}
+add_action('add_meta_boxes', 'aces_main_licence');
+
+function aces_main_licence_display_meta_box($post)
+{
+
+	$main_licence = get_post_meta($post->ID, 'main_licence_for_casino', true);
+	$casino_licences = wp_get_object_terms($post->ID, 'licence');
+
+	if (empty($main_licence)) {
+		$main_licence = '';
+	}
+	?>
+	<div class='inside'>
+		<p>
+			<label for="main_licence_for_casino_field"><b><?php _e('Main Licence', 'aces'); ?></b></label>
+			<select name="main_licence_for_casino" id="main_licence_for_casino_field" class="regular-text" style="width: calc(100% - 32px);">
+				<option value="" <?php selected($main_licence,  ''); ?>><?php _e('Select main licence...', 'aces'); ?></option>
+				<? foreach ($casino_licences as $licence) { ?>
+					<option value="<?= $licence->term_id ?>" <?php selected($main_licence,  $licence->term_id); ?>><?= $licence->name ?></option>
+				<? } ?>
+			</select>
+			<br><small><span>
+					<?= __("Main licence will be shown in the card and in the banner on the single page.", 'aces') ?>
+					<br>
+					<strong><?= __("Use only if the casino has multiple licences", 'aces') ?></strong>
+				</span></small>
+		</p>
+	</div>
+<?php
+}
