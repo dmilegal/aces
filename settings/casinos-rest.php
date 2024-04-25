@@ -6,21 +6,21 @@
 class Aces_Casino_Rest
 {
   const namespace = 'aces/v1';
-  const casino_list = '/html/casinos';
+  const review_list = '/html/reviews';
 
   public function init()
   {
-    register_rest_route(static::namespace, static::casino_list, [
+    register_rest_route(static::namespace, static::review_list, [
       [
         'methods'  => 'GET',
-        'callback' => fn ($d) => $this->get_html_casino_list($d),
+        'callback' => fn ($d) => $this->get_html_review_list($d),
         'args'     => $this->get_args(),
       ],
-      'schema' => fn () => $this->html_casinos_schema(),
+      'schema' => fn () => $this->html_reviews_schema(),
     ]);
   }
 
-  private function get_html_casino_list(WP_REST_Request $request)
+  private function get_html_review_list(WP_REST_Request $request)
   {
     $query = $this->build_query($request);
     $items_html = [];
@@ -34,19 +34,19 @@ class Aces_Casino_Rest
 
       wp_reset_postdata();
 
-      $casino_list = $this->build_casino_list($request, $ids);
+      $review_list = $this->build_review_list($request, $ids);
 
-      foreach ($casino_list as $casino) {
+      foreach ($review_list as $review) {
         ob_start();
-        get_template_part('aces/casino-card/default', null, [...$casino]);
+        get_template_part('aces/review-card/default', null, $review);
         $items_html[] = ob_get_contents();
         ob_end_clean();
       }
     }
- 
+
     return [
       'html' => implode('', $items_html),
-      'message' => count($items_html) ? __('Find casinos', 'aces') : __('No results', 'aces'),
+      'message' => count($items_html) ? __('Find reviews', 'aces') : __('No results', 'aces'),
     ];
   }
 
@@ -57,11 +57,11 @@ class Aces_Casino_Rest
     return $args;
   }
 
-  private function html_casinos_schema()
+  private function html_reviews_schema()
   {
     $schema = array(
       '$schema'              => 'http://json-schema.org/draft-04/schema#',
-      'title'                => 'casino list in html format',
+      'title'                => 'review list in html format',
       'type'                 => 'object',
       'properties'           => array(
         'html' => array(
@@ -90,21 +90,29 @@ class Aces_Casino_Rest
 
   private function build_query_args(WP_REST_Request $request)
   {
-    $params =$request->get_query_params();
+    $params = $request->get_query_params();
 
     return $params['query'] ?? [];
   }
 
-  private function build_casino_list(WP_REST_Request $request, $ids)
+  private function build_review_list(WP_REST_Request $request, $ids)
   {
     $params = $request->get_query_params();
     $full_list = $params['full_list'] ?? [];
-    $casino_list = [];
+    $review_list = [];
+    $card_variant = $params['card_variant'] ?? 'default';
+    $post_type = $params['post_type'] ?? 'casino';
+
     foreach ($ids as $id) {
-      $params = array_values(array_filter($full_list, fn ($c) => $c['casino_id'] == $id));
-      $casino_list[] = ['casino_id' => $id, ...($params ? $params[0] : [])];
+      $params = array_values(array_filter($full_list, fn ($c) => $c['post_id'] == $id));
+      $review_list[] = [
+        'post_id' => $id,
+        'card_variant' => $card_variant,
+        'post_type' => $post_type,
+        ...($params ? $params[0] : [])
+      ];
     }
-    
-    return $casino_list;
+
+    return $review_list;
   }
 }
