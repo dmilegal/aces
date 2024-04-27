@@ -19,6 +19,7 @@ global $aces_options, $aces_plugin_dir, $aces_plugin_url;
 
 $aces_plugin_dir = untrailingslashit(plugin_dir_path(__FILE__));
 $aces_plugin_url = untrailingslashit(plugin_dir_url(__FILE__));
+define("ACES_MIXED_POST_TYPES", ['casino', 'bookmaker']);
 
 function aces_init()
 {
@@ -33,7 +34,8 @@ include_once $aces_plugin_dir . '/settings/index.php';
 /*  Aces Settings Init Start */
 
 /*  ---  Organizations  ---  */
-
+include_once $aces_plugin_dir . '/settings/organizations.php';
+include_once $aces_plugin_dir . '/settings/bookmakers.php';
 include_once $aces_plugin_dir . '/settings/casinos.php';
 
 /*  ---  Units  ---  */
@@ -66,6 +68,7 @@ include_once $aces_plugin_dir . '/bookmakers.php';
 /*  ---  Casinos/Bookmakers  ---  */
 
 include_once $aces_plugin_dir . '/bookmaker-casinos.php';
+include_once $aces_plugin_dir . '/bookmaker-casinos-taxs.php';
 
 /*  ---  Units  ---  */
 
@@ -259,7 +262,7 @@ include_once $aces_plugin_dir . '/shortcodes/cons-shortcode-1.php';
 function aces_image_uploader()
 {
     global $typenow;
-    if ($typenow == 'casino' || $typenow == 'game' || $typenow == 'bonus') {
+    if ($typenow == 'casino' || $typenow == 'game' || $typenow == 'bonus' || $typenow == 'bookmaker') {
 
         if (!did_action('wp_enqueue_media')) {
             wp_enqueue_media();
