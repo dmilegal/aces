@@ -38,9 +38,16 @@ if( isset( $_GET[ 'tab' ] ) ) {
 }
 
 
-$organizations_tab_name = esc_html__('Casinos', 'aces');
+$organizations_tab_name = esc_html__('Casinos/Bookmakers', 'aces');
+
+$casinos_tab_name = esc_html__('Casinos', 'aces');
 if ( get_option( 'casinos_section_name') ) {
-    $organizations_tab_name = get_option( 'casinos_section_name' );
+    $casinos_tab_name = get_option( 'casinos_section_name' );
+}
+
+$bookmakers_tab_name = esc_html__('Bookmakers', 'aces');
+if ( get_option( 'bookmakers_section_name') ) {
+    $bookmakers_tab_name = get_option( 'bookmakers_section_name' );
 }
 
 $units_tab_name = esc_html__('Games', 'aces');
@@ -82,7 +89,9 @@ if ( get_option( 'bonuses_section_name') ) {
     </div>
     
     <h2 class="nav-tab-wrapper">
-        <a href="?page=aces&tab=casinos_tab" class="nav-tab <?php echo $active_tab == 'casinos_tab' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Organizations', 'aces'); ?> (<?php echo esc_html( $organizations_tab_name ); ?>)</a>
+        <a href="?page=aces&tab=organisations_tab" class="nav-tab <?php echo $active_tab == 'organisations_tab' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Organizations', 'aces'); ?> (<?php echo esc_html( $organizations_tab_name ); ?>)</a>
+        <a href="?page=aces&tab=casinos_tab" class="nav-tab <?php echo $active_tab == 'casinos_tab' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Organizations', 'aces'); ?> (<?php echo esc_html( $casinos_tab_name ); ?>)</a>
+        <a href="?page=aces&tab=bookmakers_tab" class="nav-tab <?php echo $active_tab == 'bookmakers_tab' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Organizations', 'aces'); ?> (<?php echo esc_html( $bookmakers_tab_name ); ?>)</a>
         <a href="?page=aces&tab=games_tab" class="nav-tab <?php echo $active_tab == 'games_tab' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Units', 'aces'); ?> (<?php echo esc_html( $units_tab_name ); ?>)</a>
         <a href="?page=aces&tab=bonuses_tab" class="nav-tab <?php echo $active_tab == 'bonuses_tab' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Offers', 'aces'); ?> (<?php echo esc_html( $offers_tab_name ); ?>)</a>
         <a href="?page=aces&tab=geolocation_tab" class="nav-tab <?php echo $active_tab == 'geolocation_tab' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Geolocation', 'aces'); ?></a>
@@ -93,10 +102,20 @@ if ( get_option( 'bonuses_section_name') ) {
 
         submit_button( esc_html__( 'Save Settings', 'aces' ) );
 
-        if( $active_tab == 'casinos_tab' )  {
+        if( $active_tab == 'organisations_tab' )  {
+
+            settings_fields( 'aces_organisations_tab' );
+            do_settings_sections( 'aces_organisations_tab' );
+
+        } else if( $active_tab == 'casinos_tab' )  {
 
             settings_fields( 'aces_casinos_tab' );
             do_settings_sections( 'aces_casinos_tab' );
+
+        } else if( $active_tab == 'bookmakers_tab' )  {
+
+            settings_fields( 'aces_bookmakers_tab' );
+            do_settings_sections( 'aces_bookmakers_tab' );
 
         } else if( $active_tab == 'games_tab' )  {
 
