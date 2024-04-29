@@ -1,7 +1,5 @@
 window.addEventListener('load', () => {
-  console.log(document.querySelectorAll('.aces-search-in-list'))
   document.querySelectorAll('.aces-search-in-list').forEach((inp) => {
-    console.log(inp)
     inp.addEventListener('input', function (e) {
       const searchText = e.target.value.toLowerCase()
       const selector = e.target.dataset.list
