@@ -53,7 +53,7 @@ include_once $aces_plugin_dir . '/settings/geolocation.php';
 
 /*  ---  REST API  ---  */
 
-include_once $aces_plugin_dir . '/settings/casinos-rest.php';
+include_once $aces_plugin_dir . '/settings/organizations-rest.php';
 
 /*  Aces Settings Init End */
 
@@ -518,7 +518,7 @@ add_filter('body_class', 'aces_change_bonus_body_classes', 10, 2);
 /* Start init rest api */
 
 add_action('rest_api_init', function() {
-    $casinoRest = new Aces_Casino_Rest();
+    $casinoRest = new Aces_Organization_Rest();
     $casinoRest->init();
 });
 
