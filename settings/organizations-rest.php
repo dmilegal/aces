@@ -3,7 +3,7 @@
 /**
  * Rest API
  */
-class Aces_Casino_Rest
+class Aces_Organization_Rest
 {
   const namespace = 'aces/v1';
   const review_list = '/html/reviews';
