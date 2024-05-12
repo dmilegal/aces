@@ -521,7 +521,7 @@ function aces_bonuses_display_casinos_list_meta_box($bonus)
 				<?php } ?>
 			</ul>
 		</div>
-<?php
+	<?php
 	} else {
 		esc_html_e('No items', 'aces');
 	}
@@ -619,7 +619,7 @@ function aces_bonuses_casinos_save_fields($post_id)
 add_filter('manage_bonus_posts_columns', 'set_custom_edit_bonus_columns');
 function set_custom_edit_bonus_columns($columns)
 {
-	$columns['bonus_parent_casino'] = __('Casinos', 'aces');
+	$columns['bonus_parent_casino'] = __('Casinos/Bookmakers', 'aces');
 
 	return $columns;
 }
@@ -628,14 +628,19 @@ function bonus_column_content($column, $post_id)
 {
 	switch ($column) {
 		case 'bonus_parent_casino':
-			$bonus_parent_casino = get_post_meta($post_id, 'bonus_parent_casino', true);
-			if (!empty($bonus_parent_casino)) {
-				$casino_titles = [];
-				foreach ($bonus_parent_casino as $casino_id) {
-					$casino_titles[] = '<a target="_blank" href="' . get_edit_post_link($casino_id) . '">' . get_the_title($casino_id) . '</a>';
-				};
+			$bonus_parents = get_post_meta($post_id, 'bonus_parent_casino', true);
+			if (!empty($bonus_parents)) {
+				foreach (["casino", "bookmaker"] as $ind => $post_type) {
+					$titles = [];
+					foreach (array_filter($bonus_parents, fn ($id) => get_post_type($id) == $post_type) as $parent_id) {
+						$titles[] = '<a target="_blank" href="' . get_edit_post_link($parent_id) . '">' . get_the_title($parent_id) . '</a>';
+					};
 
-				echo implode(', ', $casino_titles);
+					if ($ind > 0)
+						echo '<br><br>';
+					if ($titles)
+						echo ucfirst($post_type) . "s: " . implode(', ', $titles);
+				}
 			}
 			break;
 	}
@@ -645,36 +650,38 @@ add_action('manage_bonus_posts_custom_column', 'bonus_column_content', 10, 2);
 
 
 /* Start custom filter for bonuses admin page */
-add_action('restrict_manage_posts', 'filter_bonus_by_custom_field_status', 10, 2);
-function filter_bonus_by_custom_field_status($post_type, $which)
+add_action('restrict_manage_posts', 'filter_bonus_by_parent', 10, 2);
+function filter_bonus_by_parent($post_type, $which)
 {
-	if ($post_type === 'bonus') {
+	if ($post_type !== 'bonus')
+		return;
+
+	foreach (['casino', 'bookmaker'] as $post_type) {
 		$meta_key = 'bonus_parent_casino';
 		$options = array(
-			''       => __('All casinos', 'aces'),
+			''       => __("All $post_type" . "s", 'aces'),
 		);
 
-		$casino_posts = new WP_Query(array(
-			'post_type' => 'casino',
+		$posts = new WP_Query(array(
+			'post_type' => $post_type,
 			'posts_per_page' => -1,
 			'post_status' => "any",
 			'orderby' => 'title',
 			'order' => 'ASC'
 		));
 
-		$posts = $casino_posts->posts;
+		$posts = $posts->posts;
 
 		foreach ($posts as $post) {
 			$options[$post->ID] =  $post->post_title;
 		};
 
-
-		echo "<select name='{$meta_key}' id='{$meta_key}' class='postform'>";
+		echo "<select name='{$meta_key}[]' id='{$meta_key}' class='postform'>";
 		foreach ($options as $value => $name) {
 			printf(
 				'<option value="%1$s" %2$s>%3$s</option>',
 				esc_attr($value),
-				((isset($_GET[$meta_key]) && ($_GET[$meta_key] == $value)) ? ' selected="selected"' : ''),
+				((isset($_GET[$meta_key]) && (in_array($value, $_GET[$meta_key]))) ? ' selected="selected"' : ''),
 				esc_html($name)
 			);
 		}
@@ -688,20 +695,19 @@ function filter_bonus_parse_query_custom_field_status($query)
 	global $pagenow;
 
 	$meta_key = 'bonus_parent_casino';
-	$value = $_GET[$meta_key] ?? '';
-	
-	
+	$value = array_filter($_GET[$meta_key] ?? [], fn($v) => !!$v);
+
 	if ($query->is_main_query() && is_admin() && 'edit.php' === $pagenow && $value && isset($_GET['post_type']) && 'bonus' === $_GET['post_type']) {
 		$query_vars = &$query->query_vars;
 
 		$query_vars['meta_query'] = $query_vars['meta_query'] ?? array();
 
 		if (!empty($_GET[$meta_key])) {
-			$query_vars['meta_query'][] = array(
+			array_push($query_vars['meta_query'], ...array_map(fn ($v) => [
 				'key' => $meta_key,
-				'value' => $value,
+				'value' => $v,
 				'compare' => 'LIKE',
-			);
+			], $value));
 		}
 	}
 }
