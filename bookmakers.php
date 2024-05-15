@@ -1,30 +1,30 @@
 <?php
 
-/*  Casinos - Post Type Start */
+/*  Bookmaker - Post Type Start */
 
-add_action('init', 'aces_casinos', 0);
-function aces_casinos()
+add_action('init', 'aces_bookmakers', 0);
+function aces_bookmakers()
 {
 
-	$casino_slug = 'casino';
-	if (get_option('casinos_section_slug')) {
-		$casino_slug = get_option('casinos_section_slug', 'casino');
+	$bookmaker_slug = 'bookmaker';
+	if (get_option('bookmakers_section_slug')) {
+		$bookmaker_slug = get_option('bookmakers_section_slug', 'bookmaker');
 	}
 
-	$casino_name = esc_html__('Casinos', 'aces');
-	if (get_option('casinos_section_name')) {
-		$casino_name = get_option('casinos_section_name', 'Casinos');
+	$bookmaker_name = esc_html__('Bookmakers', 'aces');
+	if (get_option('bookmakers_section_name')) {
+		$bookmaker_name = get_option('bookmakers_section_name', 'Bookmakers');
 	}
 
 	$args = array(
 		'labels' => array(
-			'name' => $casino_name,
+			'name' => $bookmaker_name,
 			'add_new' => esc_html__('Add New', 'aces'),
 			'edit_item' => esc_html__('Edit Item', 'aces'),
 			'add_new_item' => esc_html__('Add New', 'aces'),
 			'view_item' => esc_html__('View Item', 'aces'),
 		),
-		'singular_label' => __('casino'),
+		'singular_label' => __('bookmaker'),
 		'public' => true,
 		'publicly_queryable' => true,
 		'show_ui' => true,
@@ -44,27 +44,27 @@ function aces_casinos()
 			'revisions'
 		),
 		'has_archive' => false,
-		'rest_base' => 'organization',
+		'rest_base' => 'bookmaker',
 		'rewrite' => array(
-			'slug' => $casino_slug,
+			'slug' => $bookmaker_slug,
 			'with_front' => false
 		)
 	);
 
-	register_post_type('casino', $args);
+	register_post_type('bookmaker', $args);
 
 	/* --- Category: Custom Taxonomy --- */
 
-	$casinos_category_title = esc_html__('Categories', 'aces');
-	if (get_option('casinos_category_title')) {
-		$casinos_category_title = get_option('casinos_category_title', 'Categories');
+	$bookmakers_category_title = esc_html__('Categories', 'aces');
+	if (get_option('bookmakers_category_title')) {
+		$bookmakers_category_title = get_option('bookmakers_category_title', 'Categories');
 	}
 
 	$labels = array(
-		'name' => $casinos_category_title,
-		'singular_name' => $casinos_category_title,
+		'name' => $bookmakers_category_title,
+		'singular_name' => $bookmakers_category_title,
 		'search_items' => esc_html__('Find Taxonomy', 'aces'),
-		'all_items' => esc_html__('All ', 'aces') . $casinos_category_title,
+		'all_items' => esc_html__('All ', 'aces') . $bookmakers_category_title,
 		'parent_item' => esc_html__('Parent Taxonomy', 'aces'),
 		'parent_item_colon' => esc_html__('Parent Taxonomy:', 'aces'),
 		'edit_item' => esc_html__('Edit Taxonomy', 'aces'),
@@ -72,7 +72,7 @@ function aces_casinos()
 		'update_item' => esc_html__('Update Taxonomy', 'aces'),
 		'add_new_item' => esc_html__('Add New Taxonomy', 'aces'),
 		'new_item_name' => esc_html__('Taxonomy', 'aces'),
-		'menu_name' => $casinos_category_title
+		'menu_name' => $bookmakers_category_title
 	);
 
 	$args = array(
@@ -91,28 +91,27 @@ function aces_casinos()
 		'_builtin' => false
 	);
 
-	register_taxonomy('casino-category', 'casino', $args);
+	register_taxonomy('bookmaker-category', 'bookmaker', $args);
 }
 
-/* --- Add custom slug for taxonomy 'casino-category' --- */
+/* --- Add custom slug for taxonomy 'bookmaker-category' --- */
 
-if (get_option('casino_category_slug')) {
+if (get_option('bookmaker_category_slug')) {
 
-	function aces_change_casino_category_slug($taxonomy, $object_type, $args)
+	function aces_change_bookmaker_category_slug($taxonomy, $object_type, $args)
 	{
 
-		$casino_category_slug = 'casino-category';
+		$bookmaker_category_slug = 'bookmaker-category';
 
-		if (get_option('casino_category_slug')) {
-			$casino_category_slug = get_option('casino_category_slug', 'casino-category');
+		if (get_option('bookmaker_category_slug')) {
+			$bookmaker_category_slug = get_option('bookmaker_category_slug', 'bookmaker-category');
 		}
 
-		if ('casino-category' == $taxonomy) {
+		if ('bookmaker-category' == $taxonomy) {
 			remove_action(current_action(), __FUNCTION__);
-			$args['rewrite'] = array('slug' => $casino_category_slug);
+			$args['rewrite'] = array('slug' => $bookmaker_category_slug);
 			register_taxonomy($taxonomy, $object_type, $args);
 		}
 	}
-	add_action('registered_taxonomy', 'aces_change_casino_category_slug', 10, 3);
+	add_action('registered_taxonomy', 'aces_change_bookmaker_category_slug', 10, 3);
 }
-
