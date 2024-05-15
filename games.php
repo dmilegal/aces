@@ -632,8 +632,67 @@ function aces_games_display_casinos_list_meta_box( $game ) {
     		$elements[$casino->ID] = $casino->post_title;
         }
     ?>
+	<input type="search" placeholder="Type to search..." style="width: 100%; margin-bottom: 8px;" class="aces-search-in-list" data-list="#casinos-list" />
 	<div style="max-height:200px; overflow-y:auto;">
-		<ul>
+		<ul id="casinos-list">
+	    <?php foreach ( $elements as $id => $element) {
+
+	        if ( is_array( $postmeta ) && in_array( $id, $postmeta ) ) {
+	            $checked = 'checked=checked';
+	        } else {
+	            $checked = null;
+	        }
+
+	        ?>
+
+	        <li>
+				<label>
+	            <input type="checkbox" name="casino_item[]" value="<?php esc_attr_e($id);?>" <?php esc_attr_e($checked); ?>>
+	            <?php esc_html_e($element); ?>
+	        	</label>
+			</li>
+
+	    <?php } ?>
+		</ul>
+	</div>
+    <?php
+	} else {
+		esc_html_e( 'No items', 'aces' );
+	}
+}
+
+
+add_action( 'admin_init', 'aces_games_bookmakers_list' );
+
+function aces_games_bookmakers_list() {
+
+	$bookmakers_section_name = esc_html__( 'Bookmakers', 'aces' );
+	if ( get_option( 'bookmakers_section_name') ) {
+		$bookmakers_section_name = esc_html__( get_option( 'bookmakers_section_name' ) );
+	}
+
+    add_meta_box( 'aces_games_bookmakers_list_meta_box',
+        $bookmakers_section_name,
+        'aces_games_display_bookmakers_list_meta_box',
+        'game', 'side', 'high'
+    );
+}
+
+function aces_games_display_bookmakers_list_meta_box( $game ) {
+    wp_nonce_field( basename(__FILE__), 'game_custom_nonce' );
+
+    $postmeta = get_post_meta( $game->ID, 'parent_casino', true );
+    $bookmakers = get_posts(array( 'post_type'=>'bookmaker', 'posts_per_page'=>-1, 'orderby'=>'post_title', 'order'=>'ASC' ));
+
+    if( $bookmakers ) {
+    	$elements = [];
+    	foreach( $bookmakers as $bookmaker ) {
+    		$elements[$bookmaker->ID] = $bookmaker->post_title;
+        }
+    ?>
+	<input type="search" placeholder="Type to search..." style="width: 100%; margin-bottom: 8px;" class="aces-search-in-list" data-list="#bookmakers-list" />
+	<div style="max-height:200px; overflow-y:auto;">
+		<ul id="bookmakers-list">
 	    <?php foreach ( $elements as $id => $element) {
 
 	        if ( is_array( $postmeta ) && in_array( $id, $postmeta ) ) {
