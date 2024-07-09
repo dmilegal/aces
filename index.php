@@ -121,6 +121,51 @@ function aces_star_rating($args = array())
 /*  ACES Rating Stars End */
 
 /* ACES Get Main Casino Bonus Start */
+function aces_get_casino_bonus_id($casino_id, $bonus_category_list = []) {
+    if ($bonus_category_list) {
+        return aces_get_casino_bonus_id_by_cats($casino_id, $bonus_category_list);
+    } else {
+        return aces_get_main_casino_bonus_id($casino_id);
+    }
+
+}
+
+function aces_get_casino_bonus_id_by_cats($casino_id, $bonus_category_list = []) {
+    if (empty($bonus_category_list)) {
+        return false;
+    }
+
+    foreach ($bonus_category_list as $category_id) {
+        $args = array(
+            'fields' => 'ids',
+            'posts_per_page' => 1,
+            'post_type' => 'bonus',
+            'meta_query' => array(
+                array(
+                    'key' => 'bonus_parent_casino',
+                    'value' => $casino_id,
+                    'compare' => 'LIKE'
+                )
+            ),
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'bonus-category',
+                    'field' => 'term_id',
+                    'terms' => $category_id,
+                )
+            )
+        );
+        
+        $bonuses = get_posts($args);
+
+        if (!empty($bonuses)) {
+            return $bonuses[0];
+        }
+    }
+
+    return false;
+}
+
 
 function aces_get_main_casino_bonus_id($casino_id)
 {
