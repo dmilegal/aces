@@ -121,16 +121,17 @@ function aces_star_rating($args = array())
 /*  ACES Rating Stars End */
 
 /* ACES Get Main Casino Bonus Start */
-function aces_get_casino_bonus_id($casino_id, $bonus_category_list = []) {
+function aces_get_casino_bonus_id($casino_id, $bonus_category_list = [])
+{
     if ($bonus_category_list) {
         return aces_get_casino_bonus_id_by_cats($casino_id, $bonus_category_list);
     } else {
         return aces_get_main_casino_bonus_id($casino_id);
     }
-
 }
 
-function aces_get_casino_bonus_id_by_cats($casino_id, $bonus_category_list = []) {
+function aces_get_casino_bonus_id_by_cats($casino_id, $bonus_category_list = [])
+{
     if (empty($bonus_category_list)) {
         return false;
     }
@@ -155,7 +156,7 @@ function aces_get_casino_bonus_id_by_cats($casino_id, $bonus_category_list = [])
                 )
             )
         );
-        
+
         $bonuses = get_posts($args);
 
         if (!empty($bonuses)) {
@@ -169,10 +170,13 @@ function aces_get_casino_bonus_id_by_cats($casino_id, $bonus_category_list = [])
 
 function aces_get_main_casino_bonus_id($casino_id)
 {
+    // Получаем выбранный бонус для казино из метаполя
     $selected_bonus = get_post_meta($casino_id, 'main_bonus_for_casino', true);
 
-    if (!$selected_bonus) return false;
+    // Получаем ID категории бонуса по умолчанию из настроек
+    $default_category = get_option('bonuses_get_bonus_default_category', false);
 
+    // Массив аргументов для запроса бонусов
     $args = array(
         'fields' => 'ids',
         'posts_per_page' => 1,
@@ -186,23 +190,44 @@ function aces_get_main_casino_bonus_id($casino_id)
         )
     );
 
-    if ($selected_bonus === 'random') {
+    // Если не выбран основной бонус для казино
+    if (!$selected_bonus) {
+        // Если указана категория по умолчанию, добавляем таксономический запрос
+        if ($default_category) {
+            $args['tax_query'] = array(
+                array(
+                    'taxonomy' => 'bonus-category',
+                    'field' => 'term_id',
+                    'terms' => $default_category
+                )
+            );
 
-        $bonuses = get_posts(array(
-            ...$args,
-            'orderby' => 'rand',
-        ));
+            $bonuses = get_posts($args);
+
+            return count($bonuses) ? $bonuses[0] : false;
+        }
+
+        return false;
+    }
+
+    // Если выбран произвольный бонус
+    if ($selected_bonus === 'random') {
+        $bonuses = get_posts(array_merge($args, array(
+            'orderby' => 'rand'
+        )));
 
         return count($bonuses) ? $bonuses[0] : false;
-    };
+    }
 
-    $bonuses = get_posts(array(
-        ...$args,
-        'post__in' => [$selected_bonus],
-    ));
+    // Если выбран конкретный бонус
+    $bonuses = get_posts(array_merge($args, array(
+        'post__in' => [$selected_bonus]
+    )));
 
+    // Если найден выбранный бонус, возвращаем его
     if (count($bonuses)) return $bonuses[0];
 
+    // Если не найден выбранный бонус, удаляем метаданные и возвращаем false
     delete_post_meta($casino_id, 'main_bonus_for_casino');
 
     return false;
@@ -518,7 +543,7 @@ add_filter('body_class', 'aces_change_casino_body_classes', 10, 2);
 
 function aces_change_game_body_classes($classes, $class)
 {
-   
+
     global $post;
 
     if (!$post || $post->post_type != 'game') {
@@ -562,7 +587,7 @@ add_filter('body_class', 'aces_change_bonus_body_classes', 10, 2);
 
 /* Start init rest api */
 
-add_action('rest_api_init', function() {
+add_action('rest_api_init', function () {
     $casinoRest = new Aces_Organization_Rest();
     $casinoRest->init();
 });
