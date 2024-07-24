@@ -549,7 +549,7 @@ function aces_bonuses_bookmakers_list()
 
 function aces_bonuses_display_bookmakers_list_meta_box($bonus)
 {
-	wp_nonce_field(basename(__FILE__), 'bonus_custom_nonce');
+	wp_nonce_field('aces_bonus_parent_casino_box', 'aces_bonus_parent_casino_nonce');
 
 	$postmeta = get_post_meta($bonus->ID, 'bonus_parent_casino', true);
 	$bookmakers = get_posts(array('post_type' => 'bookmaker', 'post_status' => 'any',  'posts_per_page' => -1, 'orderby' => 'post_title', 'order' => 'ASC'));
@@ -594,22 +594,28 @@ add_action('save_post', 'aces_bonuses_casinos_save_fields', 10, 2);
 
 function aces_bonuses_casinos_save_fields($post_id)
 {
-	$is_autosave = wp_is_post_autosave($post_id);
-	$is_revision = wp_is_post_revision($post_id);
-	$is_valid_nonce = (isset($_POST['bonus_custom_nonce']) && wp_verify_nonce($_POST['bonus_custom_nonce'], basename(__FILE__))) ? 'true' : 'false';
-
-	if ($is_autosave || $is_revision || !$is_valid_nonce) {
-		return;
+	if (!isset($_POST['aces_bonus_parent_casino_nonce'])) {
+		return $post_id;
 	}
 
-	// If the checkbox was not empty, save it as array in post meta
-	if (!empty($_POST['bonus_casino_item'])) {
-		update_post_meta($post_id, 'bonus_parent_casino', $_POST['bonus_casino_item']);
+	$nonce = $_POST['aces_bonus_parent_casino_nonce'];
 
-		// Otherwise just delete it if its blank value.
-	} else {
-		delete_post_meta($post_id, 'bonus_parent_casino');
+	if (!wp_verify_nonce($nonce, 'aces_bonus_parent_casino_box')) {
+		return $post_id;
 	}
+
+	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+		return $post_id;
+	}
+
+	if ('bonus' == $_POST['post_type']) {
+		if (!current_user_can('edit_page', $post_id)) {
+			return $post_id;
+		}
+	}
+
+	$bonus_casino_item = $_POST['bonus_casino_item'];
+	update_post_meta($post_id, 'bonus_parent_casino', $bonus_casino_item);
 };
 
 /*  Relationship of the Bonus and Casino End  */
