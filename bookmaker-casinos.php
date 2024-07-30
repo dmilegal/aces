@@ -85,7 +85,7 @@ function aces_casinos_display_bonuses_list_meta_box($post)
 				</label>
 			</p>
 			<select name="main_bonus_for_casino" id="main_bonus_for_casino_field" style="width: calc(100% - 32px);">
-				<option value="" <?php selected($value,  ""); ?>><?= __('Not show', 'aces') ?></option>
+				<option value="" <?php selected($value,  ""); ?>><?= __('From default bonus category', 'aces') ?></option>
 				<option value="random" <?php selected($value,  "random"); ?>><?= __('Random', 'aces') ?></option>
 				<?php foreach ($bonuses as $bonus) { ?>
 					<option value="<?= $bonus->ID ?>" <?php selected($value,  $bonus->ID); ?>><?php esc_html_e($bonus->post_title); ?></option>

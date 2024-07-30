@@ -194,6 +194,53 @@ function aces_bonuses_settings_init() {
         <?php
     }
 
+
+    add_settings_field(
+        'bonuses_get_bonus_default_category',
+        esc_html__( 'The default bonus category the for casino/bookmaker', 'aces' ),
+        'aces_bonuses_select_get_get_bonus_default_category_callback',
+        'aces_bonuses_tab',
+        'aces_bonuses_tab_other_settings',
+        array(
+            'id' => 'bonuses-default-category', 
+            'option_name' => 'bonuses_get_bonus_default_category'
+        )  
+    );
+    register_setting( 'aces_bonuses_tab', 'bonuses_get_bonus_default_category', 'esc_attr');
+
+    function aces_bonuses_select_get_get_bonus_default_category_callback($args) {
+        $option = esc_attr(get_option($args['option_name']));
+        $id = $args['id'];
+        $option_name = $args['option_name'];
+        
+        // Получаем все термины из таксономии "bonus_category"
+        $categories = get_terms(array(
+            'taxonomy' => 'bonus-category',
+            'hide_empty' => false
+        ));
+        
+        if (!is_wp_error($categories)) {
+            ?>
+            <select id="<?php echo esc_attr($id); ?>" name="<?php echo esc_attr($option_name); ?>" class="regular-text">
+                <option value="" <?php selected($option, ''); ?>>
+                    <?php esc_html_e('Default (none)', 'aces'); ?>
+                </option>
+                <?php foreach ($categories as $category): ?>
+                    <option value="<?php echo esc_attr($category->term_id); ?>" <?php selected($option, $category->term_id); ?>>
+                        <?php echo esc_html($category->name); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <p>
+                <?php esc_html_e('Default Bonus Category: This setting allows you to select a default bonus category for casinos or bookmakers. If the main bonus for a casino is not set, the first bonus from this default category associated with the casino will be used.', 'aces'); ?>
+            </p>
+            <?php
+        } else {
+            ?>
+            <p><?php esc_html_e('No categories found.', 'aces'); ?></p>
+            <?php
+        }
+    }
     /*  Bonuses settings tab - End  */
 
 }
