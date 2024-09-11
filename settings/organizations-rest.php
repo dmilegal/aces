@@ -15,6 +15,7 @@ class Aces_Organization_Rest
         'methods'  => 'GET',
         'callback' => fn ($d) => $this->get_html_review_list($d),
         'args'     => $this->get_args(),
+        'permission_callback' => '__return_true'
       ],
       'schema' => fn () => $this->html_reviews_schema(),
     ]);
