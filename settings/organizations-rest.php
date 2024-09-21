@@ -13,11 +13,11 @@ class Aces_Organization_Rest
     register_rest_route(static::namespace, static::review_list, [
       [
         'methods'  => 'GET',
-        'callback' => fn ($d) => $this->get_html_review_list($d),
+        'callback' => fn($d) => $this->get_html_review_list($d),
         'args'     => $this->get_args(),
         'permission_callback' => '__return_true'
       ],
-      'schema' => fn () => $this->html_reviews_schema(),
+      'schema' => fn() => $this->html_reviews_schema(),
     ]);
   }
 
@@ -48,6 +48,8 @@ class Aces_Organization_Rest
     return [
       'html' => implode('', $items_html),
       'message' => count($items_html) ? __('Find reviews', 'aces') : __('No results', 'aces'),
+      'page' => $query->query_vars['paged'] ?? 1,
+      'total_pages' => $query->max_num_pages,
     ];
   }
 
@@ -86,6 +88,7 @@ class Aces_Organization_Rest
 
   private function build_query_posts(WP_REST_Request $request)
   {
+
     return (new WP_Query)->query($this->build_query_args($request));
   }
 
@@ -93,7 +96,40 @@ class Aces_Organization_Rest
   {
     $params = $request->get_query_params();
 
-    return $params['query'] ?? [];
+    $query = $this->prepare_filter($params['query'] ?? [], $params['full_list'] ?? [], $params['filter'] ?? []);
+
+    return $query;
+  }
+
+  private function prepare_filter($query, $full_list, $filter)
+  {
+    if (empty($filter)) {
+      return $query;
+    }
+
+    $filter_bonus_cats = array_filter($filter['bonus_categories'] ?? [], fn($i) => !!$i);
+
+    if ($filter_bonus_cats) {
+      $query['post__in'] = array_filter($query['post__in'], function ($id) use ($filter_bonus_cats, $full_list) {
+        $params_arr = array_values(array_filter($full_list, fn($c) => $c['post_id'] == $id));
+        $params = $params_arr ? $params_arr[0] : [];
+        
+        $item_bonus_categories = $params['bonus_category'] ?? [];
+        $bonus_id = aces_get_casino_bonus_id($id, $item_bonus_categories);
+        $bonus_cats = aces_get_bonus_categories($bonus_id);
+
+        $has_cat = false;
+        foreach ($bonus_cats as $bonus_cat) {
+          if (in_array($bonus_cat->term_id, $filter_bonus_cats)) {
+            $has_cat = true;
+            break;
+          }
+        }
+        return $has_cat;
+      });
+    }
+
+    return $query;
   }
 
   private function build_review_list(WP_REST_Request $request, $ids)
@@ -105,7 +141,7 @@ class Aces_Organization_Rest
     $post_type = $params['post_type'] ?? 'casino';
 
     foreach ($ids as $id) {
-      $params = array_values(array_filter($full_list, fn ($c) => $c['post_id'] == $id));
+      $params = array_values(array_filter($full_list, fn($c) => $c['post_id'] == $id));
       $review_list[] = [
         'post_id' => $id,
         'card_variant' => $card_variant,
