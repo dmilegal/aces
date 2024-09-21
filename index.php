@@ -82,6 +82,12 @@ include_once $aces_plugin_dir . '/bonuses.php';
 
 include_once $aces_plugin_dir . '/functions/geolocation.php';
 
+/*  ---  Get Bonus Parameters  ---  */
+
+include_once $aces_plugin_dir . '/functions/currency-format.php';
+include_once $aces_plugin_dir . '/functions/get-bonus-parameters.php';
+include_once $aces_plugin_dir . '/functions/get-bonuses-categories.php';
+
 /*  ACES Rating Stars Start */
 
 function aces_star_rating($args = array())
