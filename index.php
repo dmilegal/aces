@@ -149,7 +149,7 @@ function aces_get_casino_bonus_id_by_cats($casino_id, $bonus_category_list = [])
     foreach ($bonus_category_list as $category_id) {
         $args = array(
             'fields' => 'ids',
-            'posts_per_page' => 1,
+            'posts_per_page' => -1,
             'post_type' => 'bonus',
             'meta_query' => array(
                 array(
