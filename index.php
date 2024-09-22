@@ -142,6 +142,10 @@ function aces_get_casino_bonus_id_by_cats($casino_id, $bonus_category_list = [])
         return false;
     }
 
+    // Получаем основной бонус казино с помощью aces_get_main_casino_bonus_id
+    $main_bonus_id = aces_get_main_casino_bonus_id($casino_id);
+
+    // Основной бонус не найден или не подходит, продолжаем с обычным поиском
     foreach ($bonus_category_list as $category_id) {
         $args = array(
             'fields' => 'ids',
@@ -166,13 +170,17 @@ function aces_get_casino_bonus_id_by_cats($casino_id, $bonus_category_list = [])
         $bonuses = get_posts($args);
 
         if (!empty($bonuses)) {
+            // Если основной бонус найден в результатах поиска, возвращаем его
+            if ($main_bonus_id && in_array($main_bonus_id, $bonuses)) {
+                return $main_bonus_id;
+            }
+            // Возвращаем первый бонус из результатов поиска
             return $bonuses[0];
         }
     }
 
     return false;
 }
-
 
 function aces_get_main_casino_bonus_id($casino_id)
 {
