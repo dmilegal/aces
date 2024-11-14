@@ -260,7 +260,7 @@ add_action('acf/include_fields', function () {
         return;
     }
 
-    acf_add_local_field_group(array(
+    acf_add_local_field_group( array(
         'key' => 'group_66e702828e327',
         'title' => 'Bonus',
         'fields' => array(
@@ -323,7 +323,7 @@ add_action('acf/include_fields', function () {
             array(
                 'key' => 'field_6734ad35b44f7',
                 'label' => 'Min. Deposit',
-                'name' => 'min_deposit_text_val',
+                'name' => 'min_deposit_variant',
                 'aria-label' => '',
                 'type' => 'select',
                 'instructions' => '',
@@ -336,9 +336,9 @@ add_action('acf/include_fields', function () {
                 ),
                 'choices' => array(
                     'value' => 'Value',
+                    'custom' => 'Custom Text',
                     'no' => 'No',
                     '-' => '-',
-                    'N/A' => 'N/A',
                 ),
                 'default_value' => 'value',
                 'return_format' => 'value',
@@ -353,7 +353,7 @@ add_action('acf/include_fields', function () {
             array(
                 'key' => 'field_66e70283aa0c3',
                 'label' => 'Min. Deposit Value',
-                'name' => 'min_deposit',
+                'name' => 'min_deposit_val',
                 'aria-label' => '',
                 'type' => 'number',
                 'instructions' => '',
@@ -381,9 +381,37 @@ add_action('acf/include_fields', function () {
                 'append' => '',
             ),
             array(
+                'key' => 'field_6735ed6b06754',
+                'label' => 'Min. Deposit Text',
+                'name' => 'min_deposit_txt',
+                'aria-label' => '',
+                'type' => 'text',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'field_6734ad35b44f7',
+                            'operator' => '==',
+                            'value' => 'custom',
+                        ),
+                    ),
+                ),
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'maxlength' => '',
+                'placeholder' => '',
+                'prepend' => '',
+                'append' => '',
+            ),
+            array(
                 'key' => 'field_6734b6c2b44f8',
                 'label' => 'Max. Cashout',
-                'name' => 'max_cashout_text_val',
+                'name' => 'max_cashout_variant',
                 'aria-label' => '',
                 'type' => 'select',
                 'instructions' => '',
@@ -396,9 +424,9 @@ add_action('acf/include_fields', function () {
                 ),
                 'choices' => array(
                     'value' => 'Value',
+                    'custom' => 'Custom Text',
                     'no' => 'No',
                     '-' => '-',
-                    'N/A' => 'N/A',
                 ),
                 'default_value' => 'value',
                 'return_format' => 'value',
@@ -413,7 +441,7 @@ add_action('acf/include_fields', function () {
             array(
                 'key' => 'field_66e70bf5aa0c4',
                 'label' => 'Max. Cashout Value',
-                'name' => 'max_cashout',
+                'name' => 'max_cashout_val',
                 'aria-label' => '',
                 'type' => 'number',
                 'instructions' => '',
@@ -441,9 +469,37 @@ add_action('acf/include_fields', function () {
                 'append' => '',
             ),
             array(
+                'key' => 'field_6735f6f706755',
+                'label' => 'Max. Cashout Text',
+                'name' => 'max_cashout_txt',
+                'aria-label' => '',
+                'type' => 'text',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'field_6734b6c2b44f8',
+                            'operator' => '==',
+                            'value' => 'custom',
+                        ),
+                    ),
+                ),
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'maxlength' => '',
+                'placeholder' => '',
+                'prepend' => '',
+                'append' => '',
+            ),
+            array(
                 'key' => 'field_6734b789b44f9',
                 'label' => 'Wagering',
-                'name' => 'wagering_text_val',
+                'name' => 'wagering_variant',
                 'aria-label' => '',
                 'type' => 'select',
                 'instructions' => '',
@@ -456,9 +512,9 @@ add_action('acf/include_fields', function () {
                 ),
                 'choices' => array(
                     'value' => 'Value',
+                    'custom' => 'Custom Text',
                     'no' => 'No',
                     '-' => '-',
-                    'N/A' => 'N/A',
                 ),
                 'default_value' => 'value',
                 'return_format' => 'value',
@@ -473,7 +529,7 @@ add_action('acf/include_fields', function () {
             array(
                 'key' => 'field_66e70c07aa0c5',
                 'label' => 'Wagering Value',
-                'name' => 'wagering',
+                'name' => 'wagering_val',
                 'aria-label' => '',
                 'type' => 'number',
                 'instructions' => '',
@@ -501,9 +557,37 @@ add_action('acf/include_fields', function () {
                 'append' => '',
             ),
             array(
+                'key' => 'field_6735f70b06756',
+                'label' => 'Wagering Text',
+                'name' => 'wagering_txt',
+                'aria-label' => '',
+                'type' => 'text',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'field_6734b789b44f9',
+                            'operator' => '==',
+                            'value' => 'custom',
+                        ),
+                    ),
+                ),
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'maxlength' => '',
+                'placeholder' => '',
+                'prepend' => '',
+                'append' => '',
+            ),
+            array(
                 'key' => 'field_6734b7c5b44fa',
                 'label' => 'Safety period',
-                'name' => 'safety_period_text_val',
+                'name' => 'safety_period_variant',
                 'aria-label' => '',
                 'type' => 'select',
                 'instructions' => '',
@@ -516,9 +600,9 @@ add_action('acf/include_fields', function () {
                 ),
                 'choices' => array(
                     'value' => 'Value',
+                    'custom' => 'Custom Text',
                     'no' => 'No',
                     '-' => '-',
-                    'N/A' => 'N/A',
                 ),
                 'default_value' => 'value',
                 'return_format' => 'value',
@@ -533,7 +617,7 @@ add_action('acf/include_fields', function () {
             array(
                 'key' => 'field_66e70d8caa0c6',
                 'label' => 'Safety period Value',
-                'name' => 'safety_period',
+                'name' => 'safety_period_val',
                 'aria-label' => '',
                 'type' => 'number',
                 'instructions' => 'Values in days',
@@ -561,9 +645,37 @@ add_action('acf/include_fields', function () {
                 'append' => '',
             ),
             array(
+                'key' => 'field_6735f72806758',
+                'label' => 'Safety period Text',
+                'name' => 'safety_period_txt',
+                'aria-label' => '',
+                'type' => 'text',
+                'instructions' => 'Values in days',
+                'required' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'field_6734b7c5b44fa',
+                            'operator' => '==',
+                            'value' => 'custom',
+                        ),
+                    ),
+                ),
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'maxlength' => '',
+                'placeholder' => '',
+                'prepend' => '',
+                'append' => '',
+            ),
+            array(
                 'key' => 'field_6734b7f7b44fb',
                 'label' => 'Freespins',
-                'name' => 'freespins_text_val',
+                'name' => 'freespins_variant',
                 'aria-label' => '',
                 'type' => 'select',
                 'instructions' => '',
@@ -576,9 +688,9 @@ add_action('acf/include_fields', function () {
                 ),
                 'choices' => array(
                     'value' => 'Value',
+                    'custom' => 'Custom Text',
                     'no' => 'No',
                     '-' => '-',
-                    'N/A' => 'N/A',
                 ),
                 'default_value' => 'value',
                 'return_format' => 'value',
@@ -593,7 +705,7 @@ add_action('acf/include_fields', function () {
             array(
                 'key' => 'field_66e71008aa0c7',
                 'label' => 'Freespins Value',
-                'name' => 'freespins',
+                'name' => 'freespins_val',
                 'aria-label' => '',
                 'type' => 'number',
                 'instructions' => '',
@@ -617,6 +729,34 @@ add_action('acf/include_fields', function () {
                 'max' => '',
                 'placeholder' => '',
                 'step' => 1,
+                'prepend' => '',
+                'append' => '',
+            ),
+            array(
+                'key' => 'field_6735f73406759',
+                'label' => 'Freespins Text',
+                'name' => 'freespins_txt',
+                'aria-label' => '',
+                'type' => 'text',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'field_6734b7f7b44fb',
+                            'operator' => '==',
+                            'value' => 'custom',
+                        ),
+                    ),
+                ),
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'maxlength' => '',
+                'placeholder' => '',
                 'prepend' => '',
                 'append' => '',
             ),
@@ -644,5 +784,5 @@ add_action('acf/include_fields', function () {
         'acfe_form' => 0,
         'acfe_meta' => '',
         'acfe_note' => '',
-    ));
+    ) );
 });
