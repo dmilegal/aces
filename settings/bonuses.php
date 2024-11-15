@@ -260,7 +260,7 @@ add_action('acf/include_fields', function () {
         return;
     }
 
-    acf_add_local_field_group( array(
+    acf_add_local_field_group(array(
         'key' => 'group_66e702828e327',
         'title' => 'Bonus',
         'fields' => array(
@@ -356,7 +356,7 @@ add_action('acf/include_fields', function () {
                 'name' => 'min_deposit_val',
                 'aria-label' => '',
                 'type' => 'number',
-                'instructions' => '',
+                'instructions' => 'Amount of money',
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
@@ -386,7 +386,7 @@ add_action('acf/include_fields', function () {
                 'name' => 'min_deposit_txt',
                 'aria-label' => '',
                 'type' => 'text',
-                'instructions' => '',
+                'instructions' => 'Custom text',
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
@@ -444,7 +444,7 @@ add_action('acf/include_fields', function () {
                 'name' => 'max_cashout_val',
                 'aria-label' => '',
                 'type' => 'number',
-                'instructions' => '',
+                'instructions' => 'Amount of money',
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
@@ -474,7 +474,7 @@ add_action('acf/include_fields', function () {
                 'name' => 'max_cashout_txt',
                 'aria-label' => '',
                 'type' => 'text',
-                'instructions' => '',
+                'instructions' => 'Custom text',
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
@@ -562,7 +562,7 @@ add_action('acf/include_fields', function () {
                 'name' => 'wagering_txt',
                 'aria-label' => '',
                 'type' => 'text',
-                'instructions' => '',
+                'instructions' => 'Custom text',
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
@@ -650,7 +650,7 @@ add_action('acf/include_fields', function () {
                 'name' => 'safety_period_txt',
                 'aria-label' => '',
                 'type' => 'text',
-                'instructions' => 'Values in days',
+                'instructions' => 'Custom text',
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
@@ -738,7 +738,7 @@ add_action('acf/include_fields', function () {
                 'name' => 'freespins_txt',
                 'aria-label' => '',
                 'type' => 'text',
-                'instructions' => '',
+                'instructions' => 'Custom text',
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
@@ -784,5 +784,5 @@ add_action('acf/include_fields', function () {
         'acfe_form' => 0,
         'acfe_meta' => '',
         'acfe_note' => '',
-    ) );
+    ));
 });
