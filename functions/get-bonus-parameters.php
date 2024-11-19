@@ -54,22 +54,6 @@ function aces_get_bonus_parameters($bonus_id)
   }
 
   //////////
-  $safety_period = get_field('safety_period_variant', $bonus_id);
-  if ($safety_period) {
-    $parameters['safety_period'] = [
-      'name' => __('Safety Period', 'aces'),
-      'value' => aces_get_bonus_parameters_value_format($safety_period)
-    ];
-  }
-  if ($safety_period === 'value') {
-    $safety_period = get_field('safety_period_val', $bonus_id);
-    $parameters['safety_period']['value'] = sprintf(_n('%s day', '%s days', $safety_period), $safety_period);
-  }
-  if ($safety_period === 'custom') {
-    $parameters['safety_period']['value'] = get_field('safety_period_txt', $bonus_id);
-  }
-
-  //////////
   $freespins = get_field('freespins_variant', $bonus_id);
   if ($freespins) {
     $parameters['freespins'] = [
@@ -85,6 +69,22 @@ function aces_get_bonus_parameters($bonus_id)
     $parameters['freespins']['value'] = get_field('freespins_txt', $bonus_id);
   }
 
+
+  //////////
+  $safety_period = get_field('safety_period_variant', $bonus_id);
+  if ($safety_period) {
+    $parameters['safety_period'] = [
+      'name' => __('Safety Period', 'aces'),
+      'value' => aces_get_bonus_parameters_value_format($safety_period)
+    ];
+  }
+  if ($safety_period === 'value') {
+    $safety_period = get_field('safety_period_val', $bonus_id);
+    $parameters['safety_period']['value'] = sprintf(_n('%s day', '%s days', $safety_period), $safety_period);
+  }
+  if ($safety_period === 'custom') {
+    $parameters['safety_period']['value'] = get_field('safety_period_txt', $bonus_id);
+  }
 
 
   return $parameters;
