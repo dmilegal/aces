@@ -12,7 +12,7 @@ class Aces_Organization_Rest
   {
     register_rest_route(static::namespace, static::review_list, [
       [
-        'methods'  => 'GET',
+        'methods'  => 'POST',
         'callback' => fn($d) => $this->get_html_review_list($d),
         'args'     => $this->get_args(),
         'permission_callback' => '__return_true'
@@ -94,7 +94,7 @@ class Aces_Organization_Rest
 
   private function build_query_args(WP_REST_Request $request)
   {
-    $params = $request->get_query_params();
+    $params = $request->get_params();
 
     $query = $this->prepare_filter($params['query'] ?? [], $params['full_list'] ?? [], $params['filter'] ?? []);
 
