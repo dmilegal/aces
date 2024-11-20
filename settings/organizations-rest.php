@@ -134,7 +134,7 @@ class Aces_Organization_Rest
 
   private function build_review_list(WP_REST_Request $request, $ids)
   {
-    $params = $request->get_query_params();
+    $params = $request->get_params();
     $full_list = $params['full_list'] ?? [];
     $review_list = [];
     $card_variant = $params['card_variant'] ?? 'default';
