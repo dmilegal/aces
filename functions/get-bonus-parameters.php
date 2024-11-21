@@ -69,6 +69,21 @@ function aces_get_bonus_parameters($bonus_id)
     $parameters['freespins']['value'] = get_field('freespins_txt', $bonus_id);
   }
 
+  //////////
+  $cash_bonus = get_field('cash_bonus_variant', $bonus_id);
+  if ($cash_bonus) {
+    $parameters['cash_bonus'] = [
+      'name' => __('Cash Bonus', 'aces'),
+      'value' => aces_get_bonus_parameters_value_format($cash_bonus)
+    ];
+  }
+  if ($cash_bonus === 'value') {
+    $cash_bonus = get_field('cash_bonus_val', $bonus_id);
+    $parameters['cash_bonus']['value'] = $cash_bonus . '%';
+  }
+  if ($cash_bonus === 'custom') {
+    $parameters['cash_bonus']['value'] = get_field('cash_bonus_txt', $bonus_id);
+  }
 
   //////////
   $safety_period = get_field('safety_period_variant', $bonus_id);
