@@ -57,7 +57,7 @@ function aces_get_bonus_parameters($bonus_id)
   $freespins = get_field('freespins_variant', $bonus_id);
   if ($freespins) {
     $parameters['freespins'] = [
-      'name' => __('Freespins', 'aces'),
+      'name' => __('Free Spins', 'aces'),
       'value' => aces_get_bonus_parameters_value_format($freespins)
     ];
   }
