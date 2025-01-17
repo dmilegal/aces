@@ -49,6 +49,7 @@ function aces_get_locale_for_currency($currencyCode) {
 
 function aces_currency_format($amount, $currencyCode = 'USD')
 {
+  if (!$amount) return '';
   $locale = aces_get_locale_for_currency($currencyCode);
   $formatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
   $formatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, 0);
