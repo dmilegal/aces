@@ -112,9 +112,9 @@ function aces_star_rating($args = array())
     $empty_stars = $stars_number - $full_stars - $half_stars;
 
     $output  = '<div class="star-rating">';
-    $output .= str_repeat('<div class="star star-full" aria-hidden="true"></div>', $full_stars);
-    $output .= str_repeat('<div class="star star-half" aria-hidden="true"></div>', $half_stars);
-    $output .= str_repeat('<div class="star star-empty" aria-hidden="true"></div>', $empty_stars);
+    $output .= str_repeat('<i class="icon-star-fill" aria-hidden="true"></i>', $full_stars);
+    $output .= str_repeat('<i class="icon-star-fill star-rating__star--half" aria-hidden="true"></i>', $half_stars);
+    $output .= str_repeat('<i class="icon-star-fill star-rating__star--empty" aria-hidden="true"></i>', $empty_stars);
     $output .= '</div>';
 
     if ($parsed_args['echo']) {
