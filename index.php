@@ -111,10 +111,10 @@ function aces_star_rating($args = array())
     $half_stars  = ceil($rating - $full_stars);
     $empty_stars = $stars_number - $full_stars - $half_stars;
 
-    $output  = '<div class="star-rating">';
-    $output .= str_repeat('<i class="icon-star-fill" aria-hidden="true"></i>', $full_stars);
-    $output .= str_repeat('<i class="icon-star-fill star-rating__star--half" aria-hidden="true"></i>', $half_stars);
-    $output .= str_repeat('<i class="icon-star-fill star-rating__star--empty" aria-hidden="true"></i>', $empty_stars);
+    $output  = '<div class="star-rating-list">';
+    $output .= str_repeat('<i class="icon-star-fill star-rating star-rating--full" aria-hidden="true"></i>', $full_stars);
+    $output .= str_repeat('<i class="icon-star-fill star-rating star-rating--half" aria-hidden="true"></i>', $half_stars);
+    $output .= str_repeat('<i class="icon-star-fill star-rating star-rating--empty" aria-hidden="true"></i>', $empty_stars);
     $output .= '</div>';
 
     if ($parsed_args['echo']) {
@@ -315,6 +315,7 @@ include_once $aces_plugin_dir . '/shortcodes/organization-single-3.php';
 include_once $aces_plugin_dir . '/shortcodes/organization-taxonomy-1.php';
 include_once $aces_plugin_dir . '/shortcodes/organization-rating-1.php';
 include_once $aces_plugin_dir . '/shortcodes/organization-rating-2.php';
+include_once $aces_plugin_dir . '/shortcodes/organization-rating-4.php';
 
 // Games
 
