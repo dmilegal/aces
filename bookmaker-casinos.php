@@ -395,6 +395,8 @@ function aces_casinos_ratings_display_meta_box($casino)
 	wp_nonce_field('aces_casinos_ratings_box', 'aces_casinos_ratings_nonce');
 	$meta = get_post_meta($casino->ID);
 
+	$casino_rating_enable = isset($meta['casino_rating_enable'][0]) ? $meta['casino_rating_enable'][0] == 1 : false;
+
 	$casino_rating_trust = (isset($meta['casino_rating_trust'][0]) && '' !== $meta['casino_rating_trust'][0]) ? $meta['casino_rating_trust'][0] : '';
 	$casino_rating_games = (isset($meta['casino_rating_games'][0]) && '' !== $meta['casino_rating_games'][0]) ? $meta['casino_rating_games'][0] : '';
 	$casino_rating_bonus = (isset($meta['casino_rating_bonus'][0]) && '' !== $meta['casino_rating_bonus'][0]) ? $meta['casino_rating_bonus'][0] : '';
@@ -427,6 +429,16 @@ function aces_casinos_ratings_display_meta_box($casino)
 			margin-right: 0 !important;
 		}
 	</style>
+
+<div class="components-base-control casino_rating_enable">
+		<div class="components-base-control__field" style="padding: 16px 0;">
+			<label class="components-base-control__label">
+
+				<input type="checkbox" name="casino_rating_enable" value="1" <?php checked($casino_rating_enable); ?>>
+				<?php esc_html_e('Enable Rating', 'aces'); ?>
+			</label>
+		</div>
+	</div>
 
 	<div class="components-base-control casino_rating_trust">
 		<div class="components-base-control__field">
@@ -588,6 +600,8 @@ function aces_casinos_ratings_save_fields($post_id)
 
 		update_post_meta($post_id, 'main_licence_for_casino', $licence);
 	}
+
+	update_post_meta($post_id, 'casino_rating_enable', isset($_POST['casino_rating_enable']) ? sanitize_text_field(wp_unslash($_POST['casino_rating_enable'])) == 1 : false);
 
 	if (!wp_is_post_revision($post_id)) {
 
