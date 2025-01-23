@@ -430,7 +430,7 @@ function aces_casinos_ratings_display_meta_box($casino)
 		}
 	</style>
 
-<div class="components-base-control casino_rating_enable">
+	<div class="components-base-control casino_rating_enable">
 		<div class="components-base-control__field" style="padding: 16px 0;">
 			<label class="components-base-control__label">
 
@@ -602,6 +602,8 @@ function aces_casinos_ratings_save_fields($post_id)
 	}
 
 	update_post_meta($post_id, 'casino_rating_enable', isset($_POST['casino_rating_enable']) ? sanitize_text_field(wp_unslash($_POST['casino_rating_enable'])) == 1 : false);
+	update_post_meta($post_id, 'show_license_tooltip', isset($_POST['show_license_tooltip']) ? sanitize_text_field(wp_unslash($_POST['show_license_tooltip'])) == 1 : false);
+	
 
 	if (!wp_is_post_revision($post_id)) {
 
@@ -936,6 +938,7 @@ function aces_main_licence_display_meta_box($post)
 {
 
 	$main_licence = get_post_meta($post->ID, 'main_licence_for_casino', true);
+	$show_license_tooltip = get_post_meta($post->ID, 'show_license_tooltip', true);
 	$casino_licences = wp_get_object_terms($post->ID, 'licence');
 
 	if (empty($main_licence)) {
@@ -956,6 +959,18 @@ function aces_main_licence_display_meta_box($post)
 					<br>
 					<strong><?= __("Use only if the casino has multiple licences", 'aces') ?></strong>
 				</span></small>
+		</p>
+		<p>
+			
+			<input id="show_license_tooltip_field" type="checkbox" name="show_license_tooltip" value="1" <?php checked($show_license_tooltip); ?> />
+			<label for="show_license_tooltip_field"><b><?php _e('Show License Tooltip', 'aces'); ?></b></label>
+			<br>
+			<small>
+				<span>
+					<?= __("The License tooltip is shown in the hero banner", 'aces') ?>
+
+				</span>
+			</small>
 		</p>
 	</div>
 <?php
