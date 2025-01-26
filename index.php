@@ -136,6 +136,25 @@ function aces_get_casino_bonus_id($casino_id, $bonus_category_list = [])
     }
 }
 
+function aces_get_all_casino_bonus_ids($casino_id) {
+    $args = array(
+        'fields' => 'ids',
+        'posts_per_page' => -1,
+        'post_type' => 'bonus',
+        'meta_query' => array(
+            array(
+                'key' => 'bonus_parent_casino',
+                'value' => $casino_id,
+                'compare' => 'LIKE'
+            )
+        )
+    );
+
+    $bonuses = get_posts($args);
+
+    return $bonuses;
+}
+
 function aces_get_casino_bonus_id_by_cats($casino_id, $bonus_category_list = [])
 {
     if (empty($bonus_category_list)) {
