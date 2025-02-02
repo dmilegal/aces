@@ -156,7 +156,7 @@ class Aces_Organization_Rest
   }
 
 
-  function filter_review_list($review_list, $filter)
+  function filter_review_list($review_list, $filter, $postIn = null)
   {
     $filter_bonus_cats = array_filter($filter['bonus_categories'] ?? [], fn($i) => !!$i);
     $n_review_list = $review_list;
@@ -188,6 +188,12 @@ class Aces_Organization_Rest
       });
     }
 
+    if ($postIn != null) {
+      $n_review_list = array_filter($n_review_list, function($params) use($postIn) {
+        return in_array($params['post_id'], $postIn);
+      });
+    }
+
     return $n_review_list;
   }
 
@@ -198,6 +204,8 @@ class Aces_Organization_Rest
     $paged = $params['query']['paged'] ?? 1;
 
     $post_per_page = $params['query']['posts_per_page'] ?? get_option('posts_per_page');
+
+    $orderby = $params['query']['orderby'] ?? '';
 
     $full_list = $params['full_list'] ?? [];
     $review_list = [];
@@ -215,6 +223,10 @@ class Aces_Organization_Rest
     $review_list = $this->filter_review_list($review_list, $params['filter']);
 
     $total_pages = $review_list ? ceil(count($review_list) / $post_per_page) : 1;
+
+    if ($orderby == 'rand') {
+      shuffle($review_list);
+    }
 
     $review_list = array_slice($review_list, $post_per_page * ($paged - 1), $post_per_page);
 
